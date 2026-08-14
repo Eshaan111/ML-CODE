@@ -66,6 +66,7 @@ def encoder(path, vocab_limit) :
     freq_words = ["<UNK>"] + freq_words
 
     word_index_dict = {word : idx for idx,word in enumerate(freq_words)}
+    index_word_dict = {idx : word for idx,word in enumerate(freq_words)}
 
     for sentence in word_tokenised_sentences :
         encoded_sentence = []
@@ -75,9 +76,8 @@ def encoder(path, vocab_limit) :
             )
         encoded_sentences.append(encoded_sentence)
 
-    return word_index_dict, encoded_sentences    
+    return word_index_dict, encoded_sentences, index_word_dict    
 
-  
 
 class Cbag_Dataset(Dataset):
 
@@ -103,8 +103,8 @@ class Cbag_Dataset(Dataset):
     def __getitem__(self, idx):
         context, target = self.samples[idx]
         return (
-            torch.tensor(context, dtype=torch.long),
-            torch.tensor(target, dtype=torch.long)
+            context, 
+            target
         )
 
 
@@ -118,6 +118,7 @@ def make_train_loader(encoded_sentences,window_size, batch_size):
         shuffle=True,
     )
     return train_dataloader
+
 
 class simpleW2V(nn.Module):
 
@@ -149,30 +150,6 @@ class simpleW2V(nn.Module):
 
         
         return logits 
-
-
-
-# model = simpleW2V(vocab_size, feature_size)
-# model.to(device)
-
-# criterion = nn.CrossEntropyLoss()
-
-# optimizer = torch.optim.Adam(
-#     model.parameters(),
-#     lr=0.001
-# )
-
-
-
-# print("Vocabulary:", len(word_index_dict))
-# print("Sentences:", len(encoded_sentences))
-# print("Training samples:", len(dataset))
-# print("Batches:", len(train_dataloader))
-
-# contexts, targets = next(iter(train_dataloader))
-
-# print("Contexts:", contexts.shape)
-# print("Targets:", targets.shape)
 
 
 def training_loop(model, train_dataloader, optimizer, epochs, criterion,device = None, writer=None):
@@ -302,6 +279,29 @@ def most_similar(model, word, word_index_dict, matrix_type="in", top_k=10):
             break
 
     return results
+
+
+def embedded_sentence(model, matrix_type,encoded_sentence, word_idx_dict):
+    # if matrix_type == "in":
+    #     W = model.embedding.weight.detach().cpu()
+
+    # elif matrix_type == "out":
+    #     W = model.output.weight.detach().cpu()
+
+    # else:
+    #     raise ValueError("matrix_type must be 'in' or 'out'")
+
+
+
+    embedded_sentence = []
+    for idx in encoded_sentence :
+        # idx = word_idx_dict.get(word, word_idx_dict['<UNK>'] )
+        embedding = get_weight_vector(model,matrix_type,idx)
+        embedded_sentence.append(embedding)
+
+    print(f'GIVEN WORD OF DIM 1 : {encoded_sentence[0]}')
+    print(f'OUTPUT DIM OF WORD: {len(embedded_sentence[0])}' )
+    return embedded_sentence
 
 
 def save_model(name):
