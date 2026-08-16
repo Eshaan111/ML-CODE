@@ -31,9 +31,133 @@ from pathlib import Path
 # vocab_size = 5000
 # feature_size = 50
 
-def encoder(path, vocab_limit) : 
 
-    folder_path = Path(path)
+class encoder():
+    def __init__(self,dir_path, vocab_limit):
+
+        self.folder_path = Path(dir_path)
+        self.vocab_limit = vocab_limit
+        self.all_words = []
+        self.freq_words = []
+        self.word_index_dict = {}
+        self.index_word_dict = {}
+
+    def sentence_encoder(self, remove_stop_words = False):
+
+        txt_files = sorted(self.folder_path.glob("*.txt"))   
+
+        word_tokenised_sentences = []
+        encoded_sentences = []
+        
+        for file_path in txt_files:
+            
+            with open(file_path, "r", encoding="utf-8") as f:
+                text = f.read()
+                text = re.sub(r"\s+", " ", text).strip()
+                sentences = sent_tokenize(text.lower())
+
+            stop_words = set(stopwords.words("english"))
+
+        
+            for sentence in sentences : 
+                word_tokenised_sentence = []
+                for word in word_tokenize(sentence):
+
+                    if remove_stop_words :
+                        if word not in stop_words and word.isalpha():
+                            word_tokenised_sentence.append(word)
+                            self.all_words.append(word)
+                    else:
+                        if word.isalpha():
+                            word_tokenised_sentence.append(word)
+                            self.all_words.append(word)
+
+                word_tokenised_sentences.append(word_tokenised_sentence)
+
+            
+        temp_all_words = pd.Series(self.all_words)
+        temp_freq_words = temp_all_words.value_counts().head(self.vocab_limit -1).index.to_list()
+        self.freq_words = ["<UNK>"] + temp_freq_words
+
+        self.word_index_dict = {word : idx for idx,word in enumerate(self.freq_words)}
+        self.index_word_dict = {idx : word for idx,word in enumerate(self.freq_words)}
+
+        for sentence in word_tokenised_sentences :
+            encoded_sentence = []
+            for word_token in sentence:
+                encoded_sentence.append(
+                    self.word_index_dict.get(word_token, self.word_index_dict["<UNK>"])
+                )
+            encoded_sentences.append(encoded_sentence)
+
+        return self.word_index_dict, encoded_sentences, self.index_word_dict   
+
+
+    def chunk_encoder(self, chunk_size, remove_stop_words = False, encode = True, pad_last = True) :
+        txt_files = sorted(self.folder_path.glob("*.txt"))   
+        chunked_data = []
+        chunked_data_encoded = []
+
+        curr_chunk = []
+
+        for file_path in txt_files:
+            tokenised_data = []
+            with open(file_path, "r", encoding="utf-8") as f:
+                text = f.read()
+                text = re.sub(r"\s+", " ", text).strip()
+                tokenised_data = word_tokenize(text.lower())
+
+            stop_words = set(stopwords.words("english"))
+
+            for word in tokenised_data :
+                if remove_stop_words and word not in stop_words:
+                    continue
+                if not word.isalpha():
+                    continue
+            
+                if len(curr_chunk) < chunk_size and word.isalpha():
+                    curr_chunk.append(word)
+                    self.all_words.append(word)
+
+                elif word.isalpha():
+                    chunked_data.append(curr_chunk)
+                    curr_chunk = [word]
+                    self.all_words.append(word)
+
+        
+
+        temp_all_words = pd.Series(self.all_words)
+        temp_freq_words = temp_all_words.value_counts().head(self.vocab_limit -1).index.to_list()
+        self.freq_words = ["<UNK>"] + temp_freq_words
+
+        self.word_index_dict = {word : idx for idx,word in enumerate(self.freq_words)}
+        self.index_word_dict = {idx : word for idx,word in enumerate(self.freq_words)}
+
+
+        if pad_last :
+            for i in range(len(curr_chunk) +1 , chunk_size +1 ):
+                if encode : curr_chunk.append(self.word_index_dict['<UNK>'])
+                else : curr_chunk.append(self.index_word_dict[0])
+
+        chunked_data.append(curr_chunk)
+
+        if encode :
+            for chunk in chunked_data :
+                encoded_chunk = []
+                for word in chunk : 
+                    encoded_chunk.append(self.word_index_dict.get(word, self.word_index_dict['<UNK>']))
+                chunked_data_encoded.append(encoded_chunk)
+            return self.word_index_dict, chunked_data_encoded, self.index_word_dict
+        else:
+            return self.word_index_dict, chunked_data, self.index_word_dict
+
+
+
+
+    
+def sentence_encoder(dir_path, vocab_limit) : 
+
+    folder_path = Path(dir_path)
     txt_files = sorted(folder_path.glob("*.txt"))   
 
 
