@@ -33,9 +33,10 @@ from pathlib import Path
 
 
 class encoder():
-    def __init__(self,dir_path, vocab_limit):
+    def __init__(self,dir_path, vocab_limit, unknown_encoding = True):
 
         self.folder_path = Path(dir_path)
+        self.unknown_encoding  = unknown_encoding
         self.vocab_limit = vocab_limit
         self.all_words = []
         self.freq_words = []
@@ -110,7 +111,7 @@ class encoder():
             stop_words = set(stopwords.words("english"))
 
             for word in tokenised_data :
-                if remove_stop_words and word not in stop_words:
+                if remove_stop_words and word in stop_words:
                     continue
                 if not word.isalpha():
                     continue
@@ -128,7 +129,10 @@ class encoder():
 
         temp_all_words = pd.Series(self.all_words)
         temp_freq_words = temp_all_words.value_counts().head(self.vocab_limit -1).index.to_list()
-        self.freq_words = ["<UNK>"] + temp_freq_words
+        if self.unknown_encoding :
+            self.freq_words = ["<UNK>"] + temp_freq_words
+        else :
+            self.freq_words = temp_freq_words
 
         self.word_index_dict = {word : idx for idx,word in enumerate(self.freq_words)}
         self.index_word_dict = {idx : word for idx,word in enumerate(self.freq_words)}
@@ -144,10 +148,16 @@ class encoder():
         if encode :
             for chunk in chunked_data :
                 encoded_chunk = []
-                for word in chunk : 
-                    encoded_chunk.append(self.word_index_dict.get(word, self.word_index_dict['<UNK>']))
+                for word in chunk :
+
+                     if self.unknown_encoding and word not in self.freq_words: 
+                        encoded_chunk.append(self.word_index_dict.get(word, self.word_index_dict['<UNK>']))
+                     else : 
+                        encoded_chunk.append(self.word_index_dict.get(word))
+
                 chunked_data_encoded.append(encoded_chunk)
             return self.word_index_dict, chunked_data_encoded, self.index_word_dict
+
         else:
             return self.word_index_dict, chunked_data, self.index_word_dict
 
@@ -155,7 +165,7 @@ class encoder():
 
 
     
-def sentence_encoder(dir_path, vocab_limit) : 
+def sentence_encoder(self, dir_path, vocab_limit, encode = True) : 
 
     folder_path = Path(dir_path)
     txt_files = sorted(folder_path.glob("*.txt"))   
@@ -174,20 +184,26 @@ def sentence_encoder(dir_path, vocab_limit) :
 
         stop_words = set(stopwords.words("english"))
 
-
-        for sentence in sentences : 
-            word_tokenised_sentence = []
-            for word in word_tokenize(sentence):
-                if word not in stop_words and word.isalpha():
-                    word_tokenised_sentence.append(word)
-                    all_words.append(word)
-                    
-            word_tokenised_sentences.append(word_tokenised_sentence)
+        if encode : 
+            for sentence in sentences : 
+                word_tokenised_sentence = []
+                for word in word_tokenize(sentence):
+                    if word not in stop_words and word.isalpha():
+                        word_tokenised_sentence.append(word)
+                        all_words.append(word)
+                        
+                word_tokenised_sentences.append(word_tokenised_sentence)
+        else :
+            return self.word_index_dict, word_tokenised_sentences, self.index_word_dict
 
         
     all_words = pd.Series(all_words)
     freq_words = all_words.value_counts().head(vocab_limit -1).index.to_list()
-    freq_words = ["<UNK>"] + freq_words
+
+    if self.unknown_encoding :
+        freq_words = ["<UNK>"] + freq_words
+    else:
+        freq_words =  freq_words
 
     word_index_dict = {word : idx for idx,word in enumerate(freq_words)}
     index_word_dict = {idx : word for idx,word in enumerate(freq_words)}
@@ -195,9 +211,20 @@ def sentence_encoder(dir_path, vocab_limit) :
     for sentence in word_tokenised_sentences :
         encoded_sentence = []
         for word_token in sentence:
-            encoded_sentence.append(
-                word_index_dict.get(word_token,word_index_dict["<UNK>"])
-            )
+
+            if self.unknown_encoding :
+                encoded_sentence.append(
+                    word_index_dict.get(word_token,word_index_dict["<UNK>"])
+                )
+
+            else:
+                if word_token not in self.freq_words :
+                    continue
+                else:
+                    encoded_sentence.append(
+                        word_index_dict.get(word_token)
+                    )
+
         encoded_sentences.append(encoded_sentence)
 
     return word_index_dict, encoded_sentences, index_word_dict    
