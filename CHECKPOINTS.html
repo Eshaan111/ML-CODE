@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Deep Learning Engineer — Must-Know Skill Set</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root{
+  color-scheme: dark;
+  --bg:#0b0d12; --bg-soft:#080a0e;
+  --surface:#151924; --surface-2:#232a38; --surface-hover:#2d3547;
+  --panel-inset:#0e1118;
+  --text:#f1f2f6; --muted:#a7b0c1; --dim:#727c8e;
+  --border:#2c3242; --border-strong:#414a60;
+  --accent:#eba63f; --accent-contrast:#181205; --accent-soft:rgba(235,166,63,.16);
+  --danger:#f16b65; --danger-soft:rgba(241,107,101,.16);
+  --shadow:0 24px 60px rgba(0,0,0,.55);
+  --font-sans:'Inter',ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-display:'Space Grotesk',var(--font-sans);
+  --font-mono:'JetBrains Mono','Fira Code',ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+::selection{background:var(--accent);color:var(--accent-contrast)}
+body{
+  margin:0; min-height:100vh;
+  font-family:var(--font-sans);
+  background:var(--bg);
+  background:
+    radial-gradient(1100px 480px at 12% -8%, color-mix(in srgb, var(--accent) 7%, transparent), transparent),
+    var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  transition:background .2s ease,color .2s ease;
+}
+body::before{content:none}
+
+/* scrollbars */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--dim)}
+
+.app-shell{
+  width:min(1920px,100%); margin:0 auto;
+  display:grid; grid-template-columns:260px minmax(0,1fr) 320px;
+  gap:20px; padding:24px 24px 90px;
+}
+main{min-width:0}
+.left-rail,.right-rail{min-width:0}
+.left-sticky,.right-sticky{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto}
+
+header{
+  position:static; margin:0 0 20px; padding:28px 30px 24px;
+  border:1px solid var(--border); border-radius:14px;
+  background:linear-gradient(165deg,var(--surface),var(--panel-inset));
+  box-shadow:var(--shadow);
+}
+
+.order-toggle{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  margin:0 0 20px;padding:14px 20px;border-radius:12px;
+  border:1px solid var(--border-strong);
+  background:linear-gradient(90deg,var(--accent-soft),transparent 60%),var(--surface);
+  box-shadow:var(--shadow);
+}
+.order-toggle-label{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;white-space:nowrap;
+}
+.order-toggle-btns{display:flex;gap:8px;flex-wrap:wrap}
+.order-btn{
+  font:700 13px/1.3 var(--font-sans);border:1.5px solid var(--border-strong);border-radius:9px;
+  padding:10px 16px;background:var(--panel-inset);color:var(--muted);cursor:pointer;
+  transition:.15s ease;white-space:nowrap;
+}
+.order-btn:hover{color:var(--text);border-color:var(--accent)}
+.order-btn.active{
+  background:var(--accent);color:var(--accent-contrast);border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-soft);
+}
+.order-toggle-hint{
+  color:var(--dim);font-size:12px;font-style:italic;flex:1 1 220px;min-width:0;
+}
+.rank-badge{
+  font-family:var(--font-mono);font-weight:700;font-size:11px;color:var(--accent);
+  background:var(--accent-soft);border:1px solid var(--border-strong);border-radius:6px;
+  padding:3px 7px;min-width:26px;text-align:center;flex:none;
+}
+.eyebrow{
+  margin:0 0 10px;color:var(--accent);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  font-family:var(--font-mono);font-weight:600;display:flex;align-items:center;
+}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);display:inline-block;margin-right:9px}
+h1{margin:0 0 10px;font-size:clamp(28px,4.2vw,46px);line-height:1.04;letter-spacing:-.03em;font-weight:700;color:var(--text);font-family:var(--font-display)}
+.sub{color:var(--muted);margin:0 0 20px;line-height:1.6;font-size:14px;max-width:66ch}
+.controls{display:grid;grid-template-columns:1fr repeat(5,auto);gap:10px}
+input[type=search],button{
+  font:600 13px/1.3 var(--font-sans);border:1px solid var(--border-strong);border-radius:8px;padding:11px 14px;
+  background:var(--panel-inset);color:var(--text);outline:none;
+}
+input[type=search]{font-weight:400;font-family:var(--font-mono);font-size:12.5px}
+input[type=search]::placeholder{color:var(--dim)}
+input[type=search]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+button{cursor:pointer;color:var(--muted);transition:.15s ease;white-space:nowrap}
+button:hover{border-color:var(--accent);color:var(--accent);background:var(--surface-hover)}
+button:focus-visible,input:focus-visible,.item input:focus-visible,#indexNav a:focus-visible,.section-head:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;
+}
+button.danger:hover{border-color:var(--danger);color:var(--danger);background:var(--danger-soft)}
+#themeToggle{color:var(--accent);border-color:var(--border-strong)}
+
+.progress-row{display:flex;align-items:center;gap:14px;margin-top:18px}
+.progress{height:9px;flex:1;overflow:hidden;border-radius:5px;background:var(--panel-inset);border:1px solid var(--border-strong)}
+.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#f6c877);box-shadow:0 0 14px var(--accent-soft);transition:width .25s ease}
+#progressText{min-width:150px;text-align:right;color:var(--muted);font-size:12px;font-family:var(--font-mono)}
+
+.rail-card{border:1px solid var(--border);background:var(--surface);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.rail-title{
+  padding:13px 16px;border-bottom:1px solid var(--border);color:var(--accent);font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;font-family:var(--font-mono);font-weight:700;
+  background:var(--panel-inset);
+}
+#indexNav{padding:8px}
+#indexNav a{display:flex;gap:9px;padding:8px 9px;border-radius:7px;text-decoration:none;color:var(--muted);font-size:12.5px;line-height:1.4;font-weight:500}
+#indexNav a:hover{background:var(--accent-soft);color:var(--text)}
+.idx-num{color:var(--accent);min-width:22px;font-family:var(--font-mono);font-weight:700;font-size:11px}
+
+.card{
+  position:relative;margin:14px 0;border:1px solid var(--border);border-radius:12px;
+  background:var(--surface);
+  overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,.28);
+  transition:border-color .18s ease,box-shadow .18s ease;scroll-margin-top:20px
+}
+.card:hover{border-color:var(--border-strong);box-shadow:0 12px 34px rgba(0,0,0,.36)}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:.9}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;cursor:pointer;user-select:none;background:linear-gradient(180deg,var(--surface-hover),transparent 140%)}
+.section-head:hover{background:var(--surface-hover)}
+.section-title-wrap{display:flex;align-items:center;gap:12px;min-width:0}
+.chevron{width:20px;height:20px;display:grid;place-items:center;flex:none;color:var(--accent);transition:transform .20s ease;font-size:16px}
+.card.collapsed .chevron{transform:rotate(-90deg)}
+h2{margin:0;font-size:16.5px;font-weight:700;letter-spacing:-.01em;color:var(--text);font-family:var(--font-display)}
+.section-progress{
+  font-size:11px;color:var(--text);white-space:nowrap;border:1px solid var(--border-strong);padding:5px 9px;
+  border-radius:6px;background:var(--panel-inset);font-family:var(--font-mono);font-weight:700;
+}
+.section-body{max-height:9000px;overflow:hidden;opacity:1;transition:max-height .35s ease,opacity .18s ease,border-color .2s ease;border-top:1px solid var(--border);background:var(--panel-inset)}
+.card.collapsed .section-body{max-height:0;opacity:0;border-top-color:transparent}
+.note{color:var(--muted);line-height:1.6;font-size:13px;font-style:italic;border-left:2px solid var(--accent);margin:14px 18px 0;padding:2px 0 2px 14px}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:7px;padding:16px}
+.item{
+  display:flex;align-items:flex-start;gap:11px;padding:9px 11px;border:1px solid var(--border);border-radius:7px;
+  cursor:grab;color:var(--text);font-size:13px;line-height:1.45;transition:.14s ease;background:var(--surface)
+}
+.item:active{cursor:grabbing}
+.item:hover{background:var(--surface-hover);border-color:var(--border-strong)}
+.item.dragging{opacity:.45;border-color:var(--accent)}
+.item input{
+  appearance:none;width:17px;height:17px;min-width:17px;margin:2px 0 0;border:1.5px solid var(--border-strong);border-radius:5px;background:var(--panel-inset);
+  display:grid;place-items:center;cursor:pointer;transition:.12s ease
+}
+.item input:hover{border-color:var(--accent)}
+.item input::before{content:"";width:8px;height:5px;border-left:2px solid var(--accent-contrast);border-bottom:2px solid var(--accent-contrast);transform:rotate(-45deg) scale(0);transition:transform .12s ease;margin-top:-2px}
+.item input:checked{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.item input:checked::before{transform:rotate(-45deg) scale(1)}
+.item input:checked + span{text-decoration:line-through;color:var(--dim)}
+.item.hidden,.card.hidden{display:none}
+.learning-wrap{padding:6px 18px 18px;border-top:1px solid var(--border)}
+.learning{counter-reset:step;list-style:none;padding:10px 0 0;margin:0;columns:3;column-gap:34px}
+.learning li{padding:7px 0;color:var(--muted);font-size:13px;break-inside:avoid;border-bottom:1px dashed var(--border)}
+.learning li::before{counter-increment:step;content:counter(step,decimal-leading-zero) "  ";color:var(--accent);font-weight:700;font-family:var(--font-mono)}
+.footer-note{color:var(--dim);text-align:center;margin-top:28px;font-size:11px;font-family:var(--font-mono);letter-spacing:.04em}
+
+/* Focus board */
+.todo-wrap{padding:12px}
+.todo-help{font-size:11px;line-height:1.55;color:var(--dim);padding:0 4px 12px}
+.todo-column{border:1px solid var(--border);border-radius:10px;background:var(--panel-inset);margin-bottom:12px;overflow:hidden}
+.todo-col-head{
+  display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);
+  font-size:11px;color:var(--text);font-family:var(--font-mono);font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+}
+.todo-count{color:var(--accent);background:var(--accent-soft);padding:1px 8px;border-radius:20px;font-size:10.5px}
+.todo-drop{min-height:86px;padding:8px;transition:.15s ease}
+.todo-drop.drag-over{background:var(--accent-soft);outline:1.5px dashed var(--accent);outline-offset:-4px}
+.todo-card{
+  position:relative;padding:10px 30px 10px 12px;margin:6px 0;border:1px solid var(--border-strong);border-radius:8px;
+  background:var(--surface);color:var(--text);font-size:12px;line-height:1.45;cursor:grab;box-shadow:0 2px 8px rgba(0,0,0,.22)
+}
+.todo-card:active{cursor:grabbing}
+.todo-card.dragging{opacity:.45}
+.todo-remove{
+  position:absolute;right:5px;top:5px;width:22px;height:22px;padding:0;border-radius:6px;display:grid;place-items:center;
+  color:var(--dim);background:transparent;border:1px solid transparent;
+}
+.todo-remove:hover{color:var(--danger);border-color:var(--danger);background:var(--danger-soft)}
+
+/* ---------- Light theme ---------- */
+body.light-theme{
+  color-scheme:light;
+  --bg:#f5f2ea; --bg-soft:#ffffff;
+  --surface:#ffffff; --surface-2:#efe8d6; --surface-hover:#e7dcc0;
+  --panel-inset:#f0e9d8;
+  --text:#191c22; --muted:#4f5764; --dim:#7a8090;
+  --border:#ddd3ba; --border-strong:#c2b393;
+  --accent:#a8650f; --accent-contrast:#ffffff; --accent-soft:rgba(168,101,15,.14);
+  --danger:#b83c36; --danger-soft:rgba(184,60,54,.10);
+  --shadow:0 18px 44px rgba(60,45,15,.14);
+  background:var(--bg);
+  background:
+    radial-gradient(1100px 480px at 12% -8%, color-mix(in srgb, var(--accent) 7%, transparent), transparent),
+    var(--bg);
+}
+body.light-theme .card::before{opacity:1}
+body.light-theme .item input::before{border-color:#ffffff}
+body.light-theme .section-head{background:linear-gradient(180deg,var(--surface-hover),transparent 140%)}
+
+@media(max-width:1400px){
+  .app-shell{grid-template-columns:230px minmax(0,1fr) 280px}
+}
+@media(max-width:1250px){
+  .app-shell{grid-template-columns:220px minmax(0,1fr)}
+  .right-rail{grid-column:1/-1}
+  .right-sticky{position:static;max-height:none}
+  .todo-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .todo-help{grid-column:1/-1}.todo-column{margin:0}
+  .learning{columns:2}
+}
+@media(max-width:850px){
+  .app-shell{grid-template-columns:1fr}
+  .left-sticky{position:static;max-height:none}
+  #indexNav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .controls{grid-template-columns:1fr 1fr}
+  input[type=search]{grid-column:1/-1}
+  .items{grid-template-columns:1fr}
+  .todo-wrap{grid-template-columns:1fr}
+  .learning{columns:1}
+}
+@media(max-width:500px){
+  .app-shell{padding:14px 12px 70px}
+  .controls{grid-template-columns:1fr}
+  input[type=search]{grid-column:auto}
+  #indexNav{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body class="light-theme">
+<div class="app-shell">
+<aside class="left-rail">
+<div class="left-sticky">
+<div class="rail-card">
+<div class="rail-title">INDEX</div>
+<nav id="indexNav"><a href="#1-mathematical-foundations"><span class="idx-num">01</span><span>Mathematical Foundations</span></a>
+<a href="#2-neural-network-fundamentals"><span class="idx-num">02</span><span>Neural Network Fundamentals</span></a>
+<a href="#3-activation-functions"><span class="idx-num">03</span><span>Activation Functions</span></a>
+<a href="#4-loss-functions"><span class="idx-num">04</span><span>Loss Functions</span></a>
+<a href="#5-optimization"><span class="idx-num">05</span><span>Optimization</span></a>
+<a href="#6-learning-rate-engineering"><span class="idx-num">06</span><span>Learning Rate Engineering</span></a>
+<a href="#7-weight-initialization"><span class="idx-num">07</span><span>Weight Initialization</span></a>
+<a href="#8-vanishing-amp-exploding-gradients"><span class="idx-num">08</span><span>Vanishing &amp; Exploding Gradients</span></a>
+<a href="#9-normalization"><span class="idx-num">09</span><span>Normalization</span></a>
+<a href="#10-overfitting-amp-generalization"><span class="idx-num">10</span><span>Overfitting &amp; Generalization</span></a>
+<a href="#11-data-splitting"><span class="idx-num">11</span><span>Data Splitting</span></a>
+<a href="#12-data-leakage"><span class="idx-num">12</span><span>Data Leakage</span></a>
+<a href="#13-data-preprocessing"><span class="idx-num">13</span><span>Data Preprocessing</span></a>
+<a href="#14-data-augmentation"><span class="idx-num">14</span><span>Data Augmentation</span></a>
+<a href="#15-class-imbalance"><span class="idx-num">15</span><span>Class Imbalance</span></a>
+<a href="#16-evaluation-metrics"><span class="idx-num">16</span><span>Evaluation Metrics</span></a>
+<a href="#17-hyperparameter-tuning"><span class="idx-num">17</span><span>Hyperparameter Tuning</span></a>
+<a href="#18-convolutional-neural-networks"><span class="idx-num">18</span><span>Convolutional Neural Networks</span></a>
+<a href="#19-sequence-models"><span class="idx-num">19</span><span>Sequence Models</span></a>
+<a href="#20-embeddings"><span class="idx-num">20</span><span>Embeddings</span></a>
+<a href="#21-attention"><span class="idx-num">21</span><span>Attention</span></a>
+<a href="#22-transformers"><span class="idx-num">22</span><span>Transformers</span></a>
+<a href="#23-modern-llm-concepts"><span class="idx-num">23</span><span>Modern LLM Concepts</span></a>
+<a href="#24-transfer-learning"><span class="idx-num">24</span><span>Transfer Learning</span></a>
+<a href="#25-training-diagnostics"><span class="idx-num">25</span><span>Training Diagnostics</span></a>
+<a href="#26-debugging-neural-networks"><span class="idx-num">26</span><span>Debugging Neural Networks</span></a>
+<a href="#27-pytorch"><span class="idx-num">27</span><span>PyTorch</span></a>
+<a href="#28-gpu-amp-memory-management"><span class="idx-num">28</span><span>GPU &amp; Memory Management</span></a>
+<a href="#29-efficient-training"><span class="idx-num">29</span><span>Efficient Training</span></a>
+<a href="#30-distributed-training"><span class="idx-num">30</span><span>Distributed Training</span></a>
+<a href="#31-experiments-amp-reproducibility"><span class="idx-num">31</span><span>Experiments &amp; Reproducibility</span></a>
+<a href="#32-model-checkpointing"><span class="idx-num">32</span><span>Model Checkpointing</span></a>
+<a href="#33-inference-engineering"><span class="idx-num">33</span><span>Inference Engineering</span></a>
+<a href="#34-model-compression"><span class="idx-num">34</span><span>Model Compression</span></a>
+<a href="#35-deployment"><span class="idx-num">35</span><span>Deployment</span></a>
+<a href="#36-linux-amp-engineering-skills"><span class="idx-num">36</span><span>Linux &amp; Engineering Skills</span></a>
+<a href="#37-python-engineering"><span class="idx-num">37</span><span>Python Engineering</span></a>
+<a href="#38-software-engineering-for-ml"><span class="idx-num">38</span><span>Software Engineering for ML</span></a>
+<a href="#39-data-pipelines"><span class="idx-num">39</span><span>Data Pipelines</span></a>
+<a href="#40-profiling-amp-performance"><span class="idx-num">40</span><span>Profiling &amp; Performance</span></a>
+<a href="#41-numerical-stability"><span class="idx-num">41</span><span>Numerical Stability</span></a>
+<a href="#42-model-capacity"><span class="idx-num">42</span><span>Model Capacity</span></a>
+<a href="#43-bias-variance-tradeoff"><span class="idx-num">43</span><span>Bias–Variance Tradeoff</span></a>
+<a href="#44-ablation-studies"><span class="idx-num">44</span><span>Ablation Studies</span></a>
+<a href="#45-baselines"><span class="idx-num">45</span><span>Baselines</span></a>
+<a href="#46-error-analysis"><span class="idx-num">46</span><span>Error Analysis</span></a>
+<a href="#47-reading-research-papers"><span class="idx-num">47</span><span>Reading Research Papers</span></a>
+<a href="#48-training-intuition"><span class="idx-num">48</span><span>Training Intuition</span></a>
+<a href="#49-skills-that-separate-a-strong-dl-engineer"><span class="idx-num">49</span><span>Skills That Separate a Strong DL Engineer</span></a>
+<a href="#50-ultimate-architecture-test"><span class="idx-num">50</span><span>Ultimate Architecture Test</span></a>
+<a href="#recommended-learning-order"><span class="idx-num">51</span><span>Recommended Learning Order</span></a></nav>
+</div>
+</div>
+</aside>
+<main>
+<header>
+<div class="header-top">
+<div>
+<p class="eyebrow"><span class="status-dot"></span>DL_SKILL_MATRIX</p>
+<h1>Deep Learning Engineer<br/>Skill Matrix</h1>
+<p class="sub">Interactive knowledge map · Color Hunt earth palette · progress stored locally · click any section header to collapse it.</p>
+</div>
+</div>
+<div class="controls">
+<input id="search" placeholder="search_skill --query ..." type="search"/>
+<button id="expandAll">Expand all</button>
+<button id="collapseAll">Collapse all</button>
+<button id="checkVisible">Check visible</button>
+<button aria-label="Toggle light/dark theme" id="themeToggle">☀ Light</button>
+<button class="danger" id="reset">Reset all</button>
+</div>
+<div class="progress-row">
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div id="progressText">0 / 0</div>
+</div>
+</header>
+<div class="order-toggle" id="orderToggle" role="group" aria-label="Skill ordering mode">
+  <div class="order-toggle-label">Sort sections &amp; skills by</div>
+  <div class="order-toggle-btns">
+    <button type="button" class="order-btn" data-mode="learning" id="orderLearningBtn">🎓 Learning Order</button>
+    <button type="button" class="order-btn" data-mode="industry" id="orderIndustryBtn">🏆 Industry / Recruiter Order</button>
+  </div>
+  <div class="order-toggle-hint" id="orderHint"></div>
+</div>
+<section class="card" data-io-sec="48" data-lo-sec="1" id="1-mathematical-foundations">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Mathematical Foundations</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><p class="note">Be comfortable tracking tensor shapes such as (batch, sequence, embedding_dim) throughout a network.</p><div class="items"><label class="item" data-io="11" data-lo="0" data-text="scalars, vectors, matrices, tensors"><input id="item-0" type="checkbox"/><span>Scalars, vectors, matrices, tensors</span></label><label class="item" data-io="2" data-lo="1" data-text="broadcasting and tensor dimensions"><input id="item-11" type="checkbox"/><span>Broadcasting and tensor dimensions</span></label><label class="item" data-io="0" data-lo="2" data-text="matrix multiplication"><input id="item-1" type="checkbox"/><span>Matrix multiplication</span></label><label class="item" data-io="1" data-lo="3" data-text="dot products"><input id="item-2" type="checkbox"/><span>Dot products</span></label><label class="item" data-io="12" data-lo="4" data-text="transpose"><input id="item-3" type="checkbox"/><span>Transpose</span></label><label class="item" data-io="13" data-lo="5" data-text="norms: l1, l2"><input id="item-8" type="checkbox"/><span>Norms: L1, L2</span></label><label class="item" data-io="26" data-lo="6" data-text="linear independence"><input id="item-6" type="checkbox"/><span>Linear independence</span></label><label class="item" data-io="27" data-lo="7" data-text="basis and vector spaces"><input id="item-7" type="checkbox"/><span>Basis and vector spaces</span></label><label class="item" data-io="28" data-lo="8" data-text="rank"><input id="item-5" type="checkbox"/><span>Rank</span></label><label class="item" data-io="29" data-lo="9" data-text="inverse and pseudo-inverse"><input id="item-4" type="checkbox"/><span>Inverse and pseudo-inverse</span></label><label class="item" data-io="30" data-lo="10" data-text="eigenvalues/eigenvectors"><input id="item-9" type="checkbox"/><span>Eigenvalues/eigenvectors</span></label><label class="item" data-io="31" data-lo="11" data-text="singular value decomposition (svd)"><input id="item-10" type="checkbox"/><span>Singular Value Decomposition (SVD)</span></label><label class="item" data-io="6" data-lo="12" data-text="derivatives"><input id="item-12" type="checkbox"/><span>Derivatives</span></label><label class="item" data-io="7" data-lo="13" data-text="partial derivatives"><input id="item-13" type="checkbox"/><span>Partial derivatives</span></label><label class="item" data-io="4" data-lo="14" data-text="chain rule"><input id="item-14" type="checkbox"/><span>Chain rule</span></label><label class="item" data-io="3" data-lo="15" data-text="gradients"><input id="item-15" type="checkbox"/><span>Gradients</span></label><label class="item" data-io="32" data-lo="16" data-text="jacobians"><input id="item-16" type="checkbox"/><span>Jacobians</span></label><label class="item" data-io="33" data-lo="17" data-text="basic hessian intuition"><input id="item-17" type="checkbox"/><span>Basic Hessian intuition</span></label><label class="item" data-io="8" data-lo="18" data-text="gradient descent from a mathematical perspective"><input id="item-18" type="checkbox"/><span>Gradient descent from a mathematical perspective</span></label><label class="item" data-io="5" data-lo="19" data-text="backpropagation"><input id="item-19" type="checkbox"/><span>Backpropagation</span></label><label class="item" data-io="14" data-lo="20" data-text="probability distributions"><input id="item-20" type="checkbox"/><span>Probability distributions</span></label><label class="item" data-io="15" data-lo="21" data-text="expectation"><input id="item-21" type="checkbox"/><span>Expectation</span></label><label class="item" data-io="16" data-lo="22" data-text="variance / standard deviation"><input id="item-22" type="checkbox"/><span>Variance / standard deviation</span></label><label class="item" data-io="17" data-lo="23" data-text="conditional probability"><input id="item-23" type="checkbox"/><span>Conditional probability</span></label><label class="item" data-io="18" data-lo="24" data-text="bayes theorem"><input id="item-24" type="checkbox"/><span>Bayes theorem</span></label><label class="item" data-io="19" data-lo="25" data-text="gaussian distribution"><input id="item-25" type="checkbox"/><span>Gaussian distribution</span></label><label class="item" data-io="20" data-lo="26" data-text="bernoulli / categorical distributions"><input id="item-26" type="checkbox"/><span>Bernoulli / categorical distributions</span></label><label class="item" data-io="21" data-lo="27" data-text="sampling"><input id="item-32" type="checkbox"/><span>Sampling</span></label><label class="item" data-io="22" data-lo="28" data-text="entropy"><input id="item-31" type="checkbox"/><span>Entropy</span></label><label class="item" data-io="9" data-lo="29" data-text="cross entropy"><input id="item-29" type="checkbox"/><span>Cross entropy</span></label><label class="item" data-io="23" data-lo="30" data-text="kl divergence"><input id="item-30" type="checkbox"/><span>KL divergence</span></label><label class="item" data-io="24" data-lo="31" data-text="maximum likelihood estimation"><input id="item-27" type="checkbox"/><span>Maximum likelihood estimation</span></label><label class="item" data-io="25" data-lo="32" data-text="log likelihood"><input id="item-28" type="checkbox"/><span>Log likelihood</span></label><label class="item" data-io="10" data-lo="33" data-text="bias vs variance"><input id="item-33" type="checkbox"/><span>Bias vs variance</span></label></div></div>
+</section><section class="card" data-io-sec="25" data-lo-sec="2" id="2-neural-network-fundamentals">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Neural Network Fundamentals</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><p class="note">Understand neural networks without relying entirely on framework abstractions, including the dimensional meaning of Y = XWᵀ + b.</p><div class="items"><label class="item" data-io="0" data-lo="0" data-text="neurons"><input id="item-34" type="checkbox"/><span>Neurons</span></label><label class="item" data-io="1" data-lo="1" data-text="layers"><input id="item-35" type="checkbox"/><span>Layers</span></label><label class="item" data-io="2" data-lo="2" data-text="weight matrices"><input id="item-36" type="checkbox"/><span>Weight matrices</span></label><label class="item" data-io="3" data-lo="3" data-text="bias vectors"><input id="item-37" type="checkbox"/><span>Bias vectors</span></label><label class="item" data-io="4" data-lo="4" data-text="forward propagation"><input id="item-38" type="checkbox"/><span>Forward propagation</span></label><label class="item" data-io="5" data-lo="5" data-text="activation functions"><input id="item-39" type="checkbox"/><span>Activation functions</span></label><label class="item" data-io="6" data-lo="6" data-text="loss functions"><input id="item-40" type="checkbox"/><span>Loss functions</span></label><label class="item" data-io="7" data-lo="7" data-text="backpropagation"><input id="item-41" type="checkbox"/><span>Backpropagation</span></label><label class="item" data-io="8" data-lo="8" data-text="computational graphs"><input id="item-42" type="checkbox"/><span>Computational graphs</span></label><label class="item" data-io="9" data-lo="9" data-text="automatic differentiation"><input id="item-43" type="checkbox"/><span>Automatic differentiation</span></label><label class="item" data-io="10" data-lo="10" data-text="parameter initialization"><input id="item-44" type="checkbox"/><span>Parameter initialization</span></label><label class="item" data-io="11" data-lo="11" data-text="mini-batch training"><input id="item-45" type="checkbox"/><span>Mini-batch training</span></label><label class="item" data-io="12" data-lo="12" data-text="epochs"><input id="item-46" type="checkbox"/><span>Epochs</span></label><label class="item" data-io="13" data-lo="13" data-text="iterations / steps"><input id="item-47" type="checkbox"/><span>Iterations / steps</span></label></div></div>
+</section><section class="card" data-io-sec="12" data-lo-sec="3" id="3-activation-functions">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Activation Functions</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="why nonlinearities are necessary"><input id="item-55" type="checkbox"/><span>Why nonlinearities are necessary</span></label><label class="item" data-io="1" data-lo="1" data-text="sigmoid"><input id="item-52" type="checkbox"/><span>Sigmoid</span></label><label class="item" data-io="2" data-lo="2" data-text="tanh"><input id="item-53" type="checkbox"/><span>Tanh</span></label><label class="item" data-io="3" data-lo="3" data-text="relu"><input id="item-48" type="checkbox"/><span>ReLU</span></label><label class="item" data-io="4" data-lo="4" data-text="leaky relu"><input id="item-49" type="checkbox"/><span>Leaky ReLU</span></label><label class="item" data-io="5" data-lo="5" data-text="gelu"><input id="item-50" type="checkbox"/><span>GELU</span></label><label class="item" data-io="6" data-lo="6" data-text="silu / swish"><input id="item-51" type="checkbox"/><span>SiLU / Swish</span></label><label class="item" data-io="7" data-lo="7" data-text="softmax"><input id="item-54" type="checkbox"/><span>Softmax</span></label><label class="item" data-io="8" data-lo="8" data-text="why sigmoid is used for binary outputs"><input id="item-59" type="checkbox"/><span>Why sigmoid is used for binary outputs</span></label><label class="item" data-io="9" data-lo="9" data-text="why softmax converts logits to categorical probabilities"><input id="item-60" type="checkbox"/><span>Why softmax converts logits to categorical probabilities</span></label><label class="item" data-io="10" data-lo="10" data-text="why modern transformers often use gelu/silu"><input id="item-61" type="checkbox"/><span>Why modern Transformers often use GELU/SiLU</span></label><label class="item" data-io="11" data-lo="11" data-text="saturation"><input id="item-56" type="checkbox"/><span>Saturation</span></label><label class="item" data-io="12" data-lo="12" data-text="dead relus"><input id="item-57" type="checkbox"/><span>Dead ReLUs</span></label><label class="item" data-io="13" data-lo="13" data-text="gradient behavior"><input id="item-58" type="checkbox"/><span>Gradient behavior</span></label></div></div>
+</section><section class="card" data-io-sec="11" data-lo-sec="4" id="4-loss-functions">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Loss Functions</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="1" data-lo="0" data-text="mse"><input id="item-66" type="checkbox"/><span>MSE</span></label><label class="item" data-io="3" data-lo="1" data-text="mae"><input id="item-67" type="checkbox"/><span>MAE</span></label><label class="item" data-io="6" data-lo="2" data-text="huber loss"><input id="item-68" type="checkbox"/><span>Huber Loss</span></label><label class="item" data-io="4" data-lo="3" data-text="logits vs probabilities"><input id="item-74" type="checkbox"/><span>Logits vs probabilities</span></label><label class="item" data-io="2" data-lo="4" data-text="binary cross entropy"><input id="item-62" type="checkbox"/><span>Binary Cross Entropy</span></label><label class="item" data-io="0" data-lo="5" data-text="cross entropy"><input id="item-63" type="checkbox"/><span>Cross Entropy</span></label><label class="item" data-io="7" data-lo="6" data-text="negative log likelihood"><input id="item-64" type="checkbox"/><span>Negative Log Likelihood</span></label><label class="item" data-io="8" data-lo="7" data-text="focal loss"><input id="item-65" type="checkbox"/><span>Focal Loss</span></label><label class="item" data-io="5" data-lo="8" data-text="know that pytorch crossentropyloss expects raw logits"><input id="item-75" type="checkbox"/><span>Know that PyTorch CrossEntropyLoss expects raw logits</span></label><label class="item" data-io="9" data-lo="9" data-text="kl divergence"><input id="item-72" type="checkbox"/><span>KL divergence</span></label><label class="item" data-io="13" data-lo="10" data-text="reconstruction loss"><input id="item-73" type="checkbox"/><span>Reconstruction loss</span></label><label class="item" data-io="10" data-lo="11" data-text="cosine similarity losses"><input id="item-71" type="checkbox"/><span>Cosine similarity losses</span></label><label class="item" data-io="11" data-lo="12" data-text="contrastive loss"><input id="item-69" type="checkbox"/><span>Contrastive loss</span></label><label class="item" data-io="12" data-lo="13" data-text="triplet loss"><input id="item-70" type="checkbox"/><span>Triplet loss</span></label></div></div>
+</section><section class="card" data-io-sec="13" data-lo-sec="5" id="5-optimization">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Optimization</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="learning rate"><input id="item-84" type="checkbox"/><span>Learning rate</span></label><label class="item" data-io="1" data-lo="1" data-text="batch gradient descent"><input id="item-76" type="checkbox"/><span>Batch Gradient Descent</span></label><label class="item" data-io="2" data-lo="2" data-text="stochastic gradient descent"><input id="item-77" type="checkbox"/><span>Stochastic Gradient Descent</span></label><label class="item" data-io="3" data-lo="3" data-text="mini-batch gradient descent"><input id="item-78" type="checkbox"/><span>Mini-batch Gradient Descent</span></label><label class="item" data-io="4" data-lo="4" data-text="sgd"><input id="item-79" type="checkbox"/><span>SGD</span></label><label class="item" data-io="5" data-lo="5" data-text="momentum"><input id="item-85" type="checkbox"/><span>Momentum</span></label><label class="item" data-io="6" data-lo="6" data-text="sgd + momentum"><input id="item-80" type="checkbox"/><span>SGD + Momentum</span></label><label class="item" data-io="7" data-lo="7" data-text="rmsprop"><input id="item-81" type="checkbox"/><span>RMSProp</span></label><label class="item" data-io="8" data-lo="8" data-text="adam"><input id="item-82" type="checkbox"/><span>Adam</span></label><label class="item" data-io="9" data-lo="9" data-text="adamw"><input id="item-83" type="checkbox"/><span>AdamW</span></label><label class="item" data-io="10" data-lo="10" data-text="why adamw differs from adam"><input id="item-88" type="checkbox"/><span>Why AdamW differs from Adam</span></label><label class="item" data-io="11" data-lo="11" data-text="weight decay"><input id="item-87" type="checkbox"/><span>Weight decay</span></label><label class="item" data-io="12" data-lo="12" data-text="exponential moving averages"><input id="item-86" type="checkbox"/><span>Exponential moving averages</span></label><label class="item" data-io="13" data-lo="13" data-text="optimizer state"><input id="item-89" type="checkbox"/><span>Optimizer state</span></label></div></div>
+</section><section class="card" data-io-sec="14" data-lo-sec="6" id="6-learning-rate-engineering">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Learning Rate Engineering</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><p class="note">Too high: oscillation, exploding loss, instability. Too low: very slow training or little useful progress.</p><div class="items"><label class="item" data-io="0" data-lo="0" data-text="constant learning rate"><input id="item-90" type="checkbox"/><span>Constant learning rate</span></label><label class="item" data-io="1" data-lo="1" data-text="recognize symptoms of learning rate being too high"><input id="item-99" type="checkbox"/><span>Recognize symptoms of learning rate being too high</span></label><label class="item" data-io="2" data-lo="2" data-text="recognize symptoms of learning rate being too low"><input id="item-100" type="checkbox"/><span>Recognize symptoms of learning rate being too low</span></label><label class="item" data-io="3" data-lo="3" data-text="learning-rate decay"><input id="item-91" type="checkbox"/><span>Learning-rate decay</span></label><label class="item" data-io="4" data-lo="4" data-text="step decay"><input id="item-92" type="checkbox"/><span>Step decay</span></label><label class="item" data-io="5" data-lo="5" data-text="exponential decay"><input id="item-93" type="checkbox"/><span>Exponential decay</span></label><label class="item" data-io="6" data-lo="6" data-text="cosine annealing"><input id="item-94" type="checkbox"/><span>Cosine annealing</span></label><label class="item" data-io="7" data-lo="7" data-text="warmup"><input id="item-95" type="checkbox"/><span>Warmup</span></label><label class="item" data-io="8" data-lo="8" data-text="onecycle policy"><input id="item-96" type="checkbox"/><span>OneCycle policy</span></label><label class="item" data-io="9" data-lo="9" data-text="reducelronplateau"><input id="item-97" type="checkbox"/><span>ReduceLROnPlateau</span></label><label class="item" data-io="10" data-lo="10" data-text="learning-rate schedulers"><input id="item-98" type="checkbox"/><span>Learning-rate schedulers</span></label></div></div>
+</section><section class="card" data-io-sec="17" data-lo-sec="7" id="7-weight-initialization">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Weight Initialization</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><p class="note">Example: ReLU networks are commonly paired with Kaiming initialization.</p><div class="items"><label class="item" data-io="0" data-lo="0" data-text="random initialization"><input id="item-101" type="checkbox"/><span>Random initialization</span></label><label class="item" data-io="1" data-lo="1" data-text="xavier / glorot initialization"><input id="item-102" type="checkbox"/><span>Xavier / Glorot initialization</span></label><label class="item" data-io="2" data-lo="2" data-text="he / kaiming initialization"><input id="item-103" type="checkbox"/><span>He / Kaiming initialization</span></label><label class="item" data-io="3" data-lo="3" data-text="orthogonal initialization"><input id="item-104" type="checkbox"/><span>Orthogonal initialization</span></label><label class="item" data-io="4" data-lo="4" data-text="bias initialization"><input id="item-105" type="checkbox"/><span>Bias initialization</span></label><label class="item" data-io="5" data-lo="5" data-text="understand initialization/activation interactions"><input id="item-106" type="checkbox"/><span>Understand initialization/activation interactions</span></label></div></div>
+</section><section class="card" data-io-sec="16" data-lo-sec="8" id="8-vanishing-amp-exploding-gradients">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Vanishing &amp; Exploding Gradients</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="vanishing gradients"><input id="item-107" type="checkbox"/><span>Vanishing gradients</span></label><label class="item" data-io="1" data-lo="1" data-text="exploding gradients"><input id="item-108" type="checkbox"/><span>Exploding gradients</span></label><label class="item" data-io="2" data-lo="2" data-text="gradient norms"><input id="item-109" type="checkbox"/><span>Gradient norms</span></label><label class="item" data-io="3" data-lo="3" data-text="monitor gradient norms"><input id="item-115" type="checkbox"/><span>Monitor gradient norms</span></label><label class="item" data-io="4" data-lo="4" data-text="inspect parameter.grad"><input id="item-114" type="checkbox"/><span>Inspect parameter.grad</span></label><label class="item" data-io="5" data-lo="5" data-text="initialization effects"><input id="item-112" type="checkbox"/><span>Initialization effects</span></label><label class="item" data-io="6" data-lo="6" data-text="normalization effects"><input id="item-113" type="checkbox"/><span>Normalization effects</span></label><label class="item" data-io="7" data-lo="7" data-text="residual connections"><input id="item-111" type="checkbox"/><span>Residual connections</span></label><label class="item" data-io="8" data-lo="8" data-text="gradient clipping"><input id="item-110" type="checkbox"/><span>Gradient clipping</span></label></div></div>
+</section><section class="card" data-io-sec="15" data-lo-sec="9" id="9-normalization">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Normalization</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="batch normalization"><input id="item-116" type="checkbox"/><span>Batch Normalization</span></label><label class="item" data-io="1" data-lo="1" data-text="layer normalization"><input id="item-117" type="checkbox"/><span>Layer Normalization</span></label><label class="item" data-io="2" data-lo="2" data-text="understand batchnorm vs layernorm"><input id="item-121" type="checkbox"/><span>Understand BatchNorm vs LayerNorm</span></label><label class="item" data-io="3" data-lo="3" data-text="group normalization"><input id="item-118" type="checkbox"/><span>Group Normalization</span></label><label class="item" data-io="4" data-lo="4" data-text="instance normalization"><input id="item-119" type="checkbox"/><span>Instance Normalization</span></label><label class="item" data-io="5" data-lo="5" data-text="rmsnorm"><input id="item-120" type="checkbox"/><span>RMSNorm</span></label></div></div>
+</section><section class="card" data-io-sec="9" data-lo-sec="10" id="10-overfitting-amp-generalization">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Overfitting &amp; Generalization</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="understand underfitting"><input id="item-133" type="checkbox"/><span>Understand underfitting</span></label><label class="item" data-io="1" data-lo="1" data-text="understand overfitting"><input id="item-134" type="checkbox"/><span>Understand overfitting</span></label><label class="item" data-io="2" data-lo="2" data-text="understand good generalization"><input id="item-135" type="checkbox"/><span>Understand good generalization</span></label><label class="item" data-io="3" data-lo="3" data-text="recognize overfitting from train/validation curves"><input id="item-122" type="checkbox"/><span>Recognize overfitting from train/validation curves</span></label><label class="item" data-io="4" data-lo="4" data-text="early stopping"><input id="item-126" type="checkbox"/><span>Early stopping</span></label><label class="item" data-io="5" data-lo="5" data-text="weight decay / l2 regularization"><input id="item-123" type="checkbox"/><span>Weight decay / L2 regularization</span></label><label class="item" data-io="6" data-lo="6" data-text="l1 regularization"><input id="item-124" type="checkbox"/><span>L1 regularization</span></label><label class="item" data-io="7" data-lo="7" data-text="dropout"><input id="item-125" type="checkbox"/><span>Dropout</span></label><label class="item" data-io="8" data-lo="8" data-text="data augmentation"><input id="item-128" type="checkbox"/><span>Data augmentation</span></label><label class="item" data-io="9" data-lo="9" data-text="label smoothing"><input id="item-127" type="checkbox"/><span>Label smoothing</span></label><label class="item" data-io="10" data-lo="10" data-text="noise injection"><input id="item-129" type="checkbox"/><span>Noise injection</span></label><label class="item" data-io="11" data-lo="11" data-text="mixup"><input id="item-131" type="checkbox"/><span>Mixup</span></label><label class="item" data-io="12" data-lo="12" data-text="cutmix"><input id="item-132" type="checkbox"/><span>CutMix</span></label><label class="item" data-io="13" data-lo="13" data-text="stochastic depth"><input id="item-130" type="checkbox"/><span>Stochastic depth</span></label></div></div>
+</section><section class="card" data-io-sec="26" data-lo-sec="11" id="11-data-splitting">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Data Splitting</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="training set"><input id="item-136" type="checkbox"/><span>Training set</span></label><label class="item" data-io="1" data-lo="1" data-text="validation set"><input id="item-137" type="checkbox"/><span>Validation set</span></label><label class="item" data-io="2" data-lo="2" data-text="test set"><input id="item-138" type="checkbox"/><span>Test set</span></label><label class="item" data-io="3" data-lo="3" data-text="why the test set should not influence development decisions"><input id="item-139" type="checkbox"/><span>Why the test set should not influence development decisions</span></label><label class="item" data-io="4" data-lo="4" data-text="cross-validation"><input id="item-140" type="checkbox"/><span>Cross-validation</span></label><label class="item" data-io="5" data-lo="5" data-text="stratified splitting"><input id="item-141" type="checkbox"/><span>Stratified splitting</span></label><label class="item" data-io="6" data-lo="6" data-text="time-series splitting"><input id="item-142" type="checkbox"/><span>Time-series splitting</span></label><label class="item" data-io="7" data-lo="7" data-text="group splitting"><input id="item-143" type="checkbox"/><span>Group splitting</span></label></div></div>
+</section><section class="card" data-io-sec="27" data-lo-sec="12" id="12-data-leakage">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Data Leakage</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="investigate suspiciously high performance"><input id="item-149" type="checkbox"/><span>Investigate suspiciously high performance</span></label><label class="item" data-io="1" data-lo="1" data-text="recognize train/test sample leakage"><input id="item-144" type="checkbox"/><span>Recognize train/test sample leakage</span></label><label class="item" data-io="2" data-lo="2" data-text="detect duplicates across train/test"><input id="item-147" type="checkbox"/><span>Detect duplicates across train/test</span></label><label class="item" data-io="3" data-lo="3" data-text="recognize future-to-past leakage"><input id="item-146" type="checkbox"/><span>Recognize future-to-past leakage</span></label><label class="item" data-io="4" data-lo="4" data-text="recognize labels leaking indirectly into features"><input id="item-148" type="checkbox"/><span>Recognize labels leaking indirectly into features</span></label><label class="item" data-io="5" data-lo="5" data-text="avoid normalization using full-dataset statistics"><input id="item-145" type="checkbox"/><span>Avoid normalization using full-dataset statistics</span></label></div></div>
+</section><section class="card" data-io-sec="28" data-lo-sec="13" id="13-data-preprocessing">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Data Preprocessing</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="missing values"><input id="item-152" type="checkbox"/><span>Missing values</span></label><label class="item" data-io="1" data-lo="1" data-text="outliers"><input id="item-153" type="checkbox"/><span>Outliers</span></label><label class="item" data-io="2" data-lo="2" data-text="normalization"><input id="item-150" type="checkbox"/><span>Normalization</span></label><label class="item" data-io="3" data-lo="3" data-text="standardization"><input id="item-151" type="checkbox"/><span>Standardization</span></label><label class="item" data-io="4" data-lo="4" data-text="categorical features"><input id="item-154" type="checkbox"/><span>Categorical features</span></label><label class="item" data-io="5" data-lo="5" data-text="image resizing"><input id="item-158" type="checkbox"/><span>Image resizing</span></label><label class="item" data-io="6" data-lo="6" data-text="audio sampling"><input id="item-159" type="checkbox"/><span>Audio sampling</span></label><label class="item" data-io="7" data-lo="7" data-text="tokenization"><input id="item-155" type="checkbox"/><span>Tokenization</span></label><label class="item" data-io="8" data-lo="8" data-text="padding"><input id="item-156" type="checkbox"/><span>Padding</span></label><label class="item" data-io="9" data-lo="9" data-text="masking"><input id="item-157" type="checkbox"/><span>Masking</span></label><label class="item" data-io="10" data-lo="10" data-text="dataset imbalance"><input id="item-160" type="checkbox"/><span>Dataset imbalance</span></label></div></div>
+</section><section class="card" data-io-sec="29" data-lo-sec="14" id="14-data-augmentation">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Data Augmentation</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="flip"><input id="item-162" type="checkbox"/><span>Flip</span></label><label class="item" data-io="1" data-lo="1" data-text="rotation"><input id="item-163" type="checkbox"/><span>Rotation</span></label><label class="item" data-io="2" data-lo="2" data-text="random crop"><input id="item-161" type="checkbox"/><span>Random crop</span></label><label class="item" data-io="3" data-lo="3" data-text="color jitter"><input id="item-164" type="checkbox"/><span>Color jitter</span></label><label class="item" data-io="4" data-lo="4" data-text="random erase"><input id="item-165" type="checkbox"/><span>Random erase</span></label><label class="item" data-io="5" data-lo="5" data-text="cutout"><input id="item-166" type="checkbox"/><span>Cutout</span></label><label class="item" data-io="6" data-lo="6" data-text="mixup"><input id="item-167" type="checkbox"/><span>Mixup</span></label><label class="item" data-io="7" data-lo="7" data-text="cutmix"><input id="item-168" type="checkbox"/><span>CutMix</span></label><label class="item" data-io="8" data-lo="8" data-text="randaugment"><input id="item-169" type="checkbox"/><span>RandAugment</span></label><label class="item" data-io="9" data-lo="9" data-text="synonym replacement"><input id="item-173" type="checkbox"/><span>Synonym replacement</span></label><label class="item" data-io="10" data-lo="10" data-text="word dropout"><input id="item-171" type="checkbox"/><span>Word dropout</span></label><label class="item" data-io="11" data-lo="11" data-text="token masking"><input id="item-170" type="checkbox"/><span>Token masking</span></label><label class="item" data-io="12" data-lo="12" data-text="back translation"><input id="item-172" type="checkbox"/><span>Back translation</span></label><label class="item" data-io="13" data-lo="13" data-text="sequence corruption"><input id="item-174" type="checkbox"/><span>Sequence corruption</span></label><label class="item" data-io="14" data-lo="14" data-text="ensure augmentation preserves the semantic label"><input id="item-175" type="checkbox"/><span>Ensure augmentation preserves the semantic label</span></label></div></div>
+</section><section class="card" data-io-sec="30" data-lo-sec="15" id="15-class-imbalance">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Class Imbalance</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="know why accuracy can be misleading on imbalanced datasets"><input id="item-182" type="checkbox"/><span>Know why accuracy can be misleading on imbalanced datasets</span></label><label class="item" data-io="1" data-lo="1" data-text="undersampling"><input id="item-178" type="checkbox"/><span>Undersampling</span></label><label class="item" data-io="2" data-lo="2" data-text="oversampling"><input id="item-177" type="checkbox"/><span>Oversampling</span></label><label class="item" data-io="3" data-lo="3" data-text="class weights"><input id="item-181" type="checkbox"/><span>Class weights</span></label><label class="item" data-io="4" data-lo="4" data-text="weighted losses"><input id="item-176" type="checkbox"/><span>Weighted losses</span></label><label class="item" data-io="5" data-lo="5" data-text="balanced batch sampling"><input id="item-180" type="checkbox"/><span>Balanced batch sampling</span></label><label class="item" data-io="6" data-lo="6" data-text="focal loss"><input id="item-179" type="checkbox"/><span>Focal loss</span></label></div></div>
+</section><section class="card" data-io-sec="10" data-lo-sec="16" id="16-evaluation-metrics">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Evaluation Metrics</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="accuracy"><input id="item-183" type="checkbox"/><span>Accuracy</span></label><label class="item" data-io="4" data-lo="1" data-text="confusion matrix"><input id="item-187" type="checkbox"/><span>Confusion matrix</span></label><label class="item" data-io="1" data-lo="2" data-text="precision"><input id="item-184" type="checkbox"/><span>Precision</span></label><label class="item" data-io="2" data-lo="3" data-text="recall"><input id="item-185" type="checkbox"/><span>Recall</span></label><label class="item" data-io="3" data-lo="4" data-text="f1 score"><input id="item-186" type="checkbox"/><span>F1 score</span></label><label class="item" data-io="9" data-lo="5" data-text="top-k accuracy"><input id="item-191" type="checkbox"/><span>Top-k accuracy</span></label><label class="item" data-io="6" data-lo="6" data-text="roc"><input id="item-188" type="checkbox"/><span>ROC</span></label><label class="item" data-io="7" data-lo="7" data-text="roc-auc"><input id="item-189" type="checkbox"/><span>ROC-AUC</span></label><label class="item" data-io="8" data-lo="8" data-text="pr-auc"><input id="item-190" type="checkbox"/><span>PR-AUC</span></label><label class="item" data-io="10" data-lo="9" data-text="mse"><input id="item-192" type="checkbox"/><span>MSE</span></label><label class="item" data-io="11" data-lo="10" data-text="rmse"><input id="item-193" type="checkbox"/><span>RMSE</span></label><label class="item" data-io="12" data-lo="11" data-text="mae"><input id="item-194" type="checkbox"/><span>MAE</span></label><label class="item" data-io="13" data-lo="12" data-text="r²"><input id="item-195" type="checkbox"/><span>R²</span></label><label class="item" data-io="5" data-lo="13" data-text="choose metrics that match the real objective"><input id="item-196" type="checkbox"/><span>Choose metrics that match the real objective</span></label></div></div>
+</section><section class="card" data-io-sec="45" data-lo-sec="17" id="17-hyperparameter-tuning">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Hyperparameter Tuning</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="learning rate"><input id="item-197" type="checkbox"/><span>Learning rate</span></label><label class="item" data-io="1" data-lo="1" data-text="batch size"><input id="item-198" type="checkbox"/><span>Batch size</span></label><label class="item" data-io="2" data-lo="2" data-text="weight decay"><input id="item-199" type="checkbox"/><span>Weight decay</span></label><label class="item" data-io="3" data-lo="3" data-text="dropout"><input id="item-200" type="checkbox"/><span>Dropout</span></label><label class="item" data-io="4" data-lo="4" data-text="optimizer"><input id="item-203" type="checkbox"/><span>Optimizer</span></label><label class="item" data-io="5" data-lo="5" data-text="scheduler"><input id="item-204" type="checkbox"/><span>Scheduler</span></label><label class="item" data-io="6" data-lo="6" data-text="hidden dimension"><input id="item-201" type="checkbox"/><span>Hidden dimension</span></label><label class="item" data-io="7" data-lo="7" data-text="number of layers"><input id="item-202" type="checkbox"/><span>Number of layers</span></label><label class="item" data-io="8" data-lo="8" data-text="sequence length"><input id="item-205" type="checkbox"/><span>Sequence length</span></label><label class="item" data-io="9" data-lo="9" data-text="data augmentation strength"><input id="item-206" type="checkbox"/><span>Data augmentation strength</span></label><label class="item" data-io="10" data-lo="10" data-text="grid search"><input id="item-207" type="checkbox"/><span>Grid search</span></label><label class="item" data-io="11" data-lo="11" data-text="random search"><input id="item-208" type="checkbox"/><span>Random search</span></label><label class="item" data-io="12" data-lo="12" data-text="understand why random search can beat naive grid search"><input id="item-211" type="checkbox"/><span>Understand why random search can beat naive grid search</span></label><label class="item" data-io="13" data-lo="13" data-text="bayesian optimization"><input id="item-209" type="checkbox"/><span>Bayesian optimization</span></label><label class="item" data-io="14" data-lo="14" data-text="optuna-style optimization"><input id="item-210" type="checkbox"/><span>Optuna-style optimization</span></label></div></div>
+</section><section class="card" data-io-sec="18" data-lo-sec="18" id="18-convolutional-neural-networks">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Convolutional Neural Networks</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="convolution"><input id="item-212" type="checkbox"/><span>Convolution</span></label><label class="item" data-io="1" data-lo="1" data-text="kernels / filters"><input id="item-213" type="checkbox"/><span>Kernels / filters</span></label><label class="item" data-io="2" data-lo="2" data-text="feature maps"><input id="item-214" type="checkbox"/><span>Feature maps</span></label><label class="item" data-io="3" data-lo="3" data-text="channels"><input id="item-215" type="checkbox"/><span>Channels</span></label><label class="item" data-io="4" data-lo="4" data-text="stride"><input id="item-216" type="checkbox"/><span>Stride</span></label><label class="item" data-io="5" data-lo="5" data-text="padding"><input id="item-217" type="checkbox"/><span>Padding</span></label><label class="item" data-io="6" data-lo="6" data-text="dilation"><input id="item-218" type="checkbox"/><span>Dilation</span></label><label class="item" data-io="7" data-lo="7" data-text="pooling"><input id="item-219" type="checkbox"/><span>Pooling</span></label><label class="item" data-io="8" data-lo="8" data-text="receptive field"><input id="item-220" type="checkbox"/><span>Receptive field</span></label><label class="item" data-io="14" data-lo="9" data-text="lenet"><input id="item-221" type="checkbox"/><span>LeNet</span></label><label class="item" data-io="13" data-lo="10" data-text="alexnet"><input id="item-222" type="checkbox"/><span>AlexNet</span></label><label class="item" data-io="12" data-lo="11" data-text="vgg"><input id="item-223" type="checkbox"/><span>VGG</span></label><label class="item" data-io="9" data-lo="12" data-text="resnet"><input id="item-224" type="checkbox"/><span>ResNet</span></label><label class="item" data-io="15" data-lo="13" data-text="densenet"><input id="item-225" type="checkbox"/><span>DenseNet</span></label><label class="item" data-io="16" data-lo="14" data-text="efficientnet"><input id="item-226" type="checkbox"/><span>EfficientNet</span></label><label class="item" data-io="10" data-lo="15" data-text="residual connection y = f(x) + x"><input id="item-227" type="checkbox"/><span>Residual connection y = F(x) + x</span></label><label class="item" data-io="11" data-lo="16" data-text="why residual connections help optimization"><input id="item-228" type="checkbox"/><span>Why residual connections help optimization</span></label></div></div>
+</section><section class="card" data-io-sec="19" data-lo-sec="19" id="19-sequence-models">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Sequence Models</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="vanilla rnn"><input id="item-229" type="checkbox"/><span>Vanilla RNN</span></label><label class="item" data-io="1" data-lo="1" data-text="hidden state"><input id="item-230" type="checkbox"/><span>Hidden state</span></label><label class="item" data-io="2" data-lo="2" data-text="backpropagation through time"><input id="item-231" type="checkbox"/><span>Backpropagation Through Time</span></label><label class="item" data-io="3" data-lo="3" data-text="vanishing gradients"><input id="item-232" type="checkbox"/><span>Vanishing gradients</span></label><label class="item" data-io="4" data-lo="4" data-text="exploding gradients"><input id="item-233" type="checkbox"/><span>Exploding gradients</span></label><label class="item" data-io="5" data-lo="5" data-text="lstm forget gate"><input id="item-234" type="checkbox"/><span>LSTM forget gate</span></label><label class="item" data-io="6" data-lo="6" data-text="lstm input gate"><input id="item-235" type="checkbox"/><span>LSTM input gate</span></label><label class="item" data-io="7" data-lo="7" data-text="lstm candidate state"><input id="item-236" type="checkbox"/><span>LSTM candidate state</span></label><label class="item" data-io="8" data-lo="8" data-text="lstm cell state"><input id="item-237" type="checkbox"/><span>LSTM cell state</span></label><label class="item" data-io="9" data-lo="9" data-text="lstm output gate"><input id="item-238" type="checkbox"/><span>LSTM output gate</span></label><label class="item" data-io="10" data-lo="10" data-text="lstm hidden state"><input id="item-239" type="checkbox"/><span>LSTM hidden state</span></label><label class="item" data-io="11" data-lo="11" data-text="gru update gate"><input id="item-240" type="checkbox"/><span>GRU update gate</span></label><label class="item" data-io="12" data-lo="12" data-text="gru reset gate"><input id="item-241" type="checkbox"/><span>GRU reset gate</span></label><label class="item" data-io="13" data-lo="13" data-text="implement a simple rnn/lstm using nn.linear"><input id="item-242" type="checkbox"/><span>Implement a simple RNN/LSTM using nn.Linear</span></label></div></div>
+</section><section class="card" data-io-sec="20" data-lo-sec="20" id="20-embeddings">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Embeddings</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="one-hot representations"><input id="item-243" type="checkbox"/><span>One-hot representations</span></label><label class="item" data-io="1" data-lo="1" data-text="embedding matrices"><input id="item-244" type="checkbox"/><span>Embedding matrices</span></label><label class="item" data-io="2" data-lo="2" data-text="learned embeddings"><input id="item-245" type="checkbox"/><span>Learned embeddings</span></label><label class="item" data-io="3" data-lo="3" data-text="understand nn.embedding(v, d) as a learnable v × d lookup matrix"><input id="item-254" type="checkbox"/><span>Understand nn.Embedding(V, D) as a learnable V × D lookup matrix</span></label><label class="item" data-io="4" data-lo="4" data-text="embedding spaces"><input id="item-247" type="checkbox"/><span>Embedding spaces</span></label><label class="item" data-io="5" data-lo="5" data-text="cosine similarity"><input id="item-246" type="checkbox"/><span>Cosine similarity</span></label><label class="item" data-io="6" data-lo="6" data-text="semantic similarity"><input id="item-248" type="checkbox"/><span>Semantic similarity</span></label><label class="item" data-io="7" data-lo="7" data-text="word2vec"><input id="item-249" type="checkbox"/><span>Word2Vec</span></label><label class="item" data-io="8" data-lo="8" data-text="cbow"><input id="item-250" type="checkbox"/><span>CBOW</span></label><label class="item" data-io="9" data-lo="9" data-text="skip-gram"><input id="item-251" type="checkbox"/><span>Skip-gram</span></label><label class="item" data-io="10" data-lo="10" data-text="negative sampling"><input id="item-252" type="checkbox"/><span>Negative sampling</span></label><label class="item" data-io="11" data-lo="11" data-text="positional embeddings"><input id="item-253" type="checkbox"/><span>Positional embeddings</span></label></div></div>
+</section><section class="card" data-io-sec="21" data-lo-sec="21" id="21-attention">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Attention</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="query"><input id="item-255" type="checkbox"/><span>Query</span></label><label class="item" data-io="1" data-lo="1" data-text="key"><input id="item-256" type="checkbox"/><span>Key</span></label><label class="item" data-io="2" data-lo="2" data-text="value"><input id="item-257" type="checkbox"/><span>Value</span></label><label class="item" data-io="3" data-lo="3" data-text="attention scores"><input id="item-258" type="checkbox"/><span>Attention scores</span></label><label class="item" data-io="4" data-lo="4" data-text="scaled dot-product attention"><input id="item-259" type="checkbox"/><span>Scaled dot-product attention</span></label><label class="item" data-io="5" data-lo="5" data-text="understand attention(q,k,v) = softmax(qkᵀ / √dₖ)v"><input id="item-265" type="checkbox"/><span>Understand Attention(Q,K,V) = softmax(QKᵀ / √dₖ)V</span></label><label class="item" data-io="6" data-lo="6" data-text="self-attention"><input id="item-260" type="checkbox"/><span>Self-attention</span></label><label class="item" data-io="7" data-lo="7" data-text="cross-attention"><input id="item-261" type="checkbox"/><span>Cross-attention</span></label><label class="item" data-io="8" data-lo="8" data-text="causal attention"><input id="item-262" type="checkbox"/><span>Causal attention</span></label><label class="item" data-io="9" data-lo="9" data-text="attention masks"><input id="item-263" type="checkbox"/><span>Attention masks</span></label><label class="item" data-io="10" data-lo="10" data-text="multi-head attention"><input id="item-264" type="checkbox"/><span>Multi-head attention</span></label><label class="item" data-io="11" data-lo="11" data-text="track tensor dimensions through every attention operation"><input id="item-266" type="checkbox"/><span>Track tensor dimensions through every attention operation</span></label></div></div>
+</section><section class="card" data-io-sec="22" data-lo-sec="22" id="22-transformers">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Transformers</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="token embeddings"><input id="item-267" type="checkbox"/><span>Token embeddings</span></label><label class="item" data-io="1" data-lo="1" data-text="positional encoding"><input id="item-268" type="checkbox"/><span>Positional encoding</span></label><label class="item" data-io="2" data-lo="2" data-text="self-attention"><input id="item-269" type="checkbox"/><span>Self-attention</span></label><label class="item" data-io="3" data-lo="3" data-text="multi-head attention"><input id="item-270" type="checkbox"/><span>Multi-head attention</span></label><label class="item" data-io="4" data-lo="4" data-text="feed-forward networks"><input id="item-271" type="checkbox"/><span>Feed-forward networks</span></label><label class="item" data-io="5" data-lo="5" data-text="residual connections"><input id="item-272" type="checkbox"/><span>Residual connections</span></label><label class="item" data-io="6" data-lo="6" data-text="layernorm"><input id="item-273" type="checkbox"/><span>LayerNorm</span></label><label class="item" data-io="7" data-lo="7" data-text="attention masks"><input id="item-274" type="checkbox"/><span>Attention masks</span></label><label class="item" data-io="8" data-lo="8" data-text="encoder"><input id="item-275" type="checkbox"/><span>Encoder</span></label><label class="item" data-io="9" data-lo="9" data-text="decoder"><input id="item-276" type="checkbox"/><span>Decoder</span></label><label class="item" data-io="10" data-lo="10" data-text="encoder-decoder architecture"><input id="item-277" type="checkbox"/><span>Encoder-decoder architecture</span></label><label class="item" data-io="11" data-lo="11" data-text="bert"><input id="item-278" type="checkbox"/><span>BERT</span></label><label class="item" data-io="12" data-lo="12" data-text="gpt"><input id="item-279" type="checkbox"/><span>GPT</span></label><label class="item" data-io="13" data-lo="13" data-text="t5"><input id="item-280" type="checkbox"/><span>T5</span></label><label class="item" data-io="14" data-lo="14" data-text="vision transformer"><input id="item-281" type="checkbox"/><span>Vision Transformer</span></label></div></div>
+</section><section class="card" data-io-sec="23" data-lo-sec="23" id="23-modern-llm-concepts">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Modern LLM Concepts</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="tokenization"><input id="item-282" type="checkbox"/><span>Tokenization</span></label><label class="item" data-io="1" data-lo="1" data-text="bpe"><input id="item-283" type="checkbox"/><span>BPE</span></label><label class="item" data-io="23" data-lo="2" data-text="wordpiece"><input id="item-284" type="checkbox"/><span>WordPiece</span></label><label class="item" data-io="24" data-lo="3" data-text="sentencepiece"><input id="item-285" type="checkbox"/><span>SentencePiece</span></label><label class="item" data-io="2" data-lo="4" data-text="context windows"><input id="item-286" type="checkbox"/><span>Context windows</span></label><label class="item" data-io="21" data-lo="5" data-text="autoregressive training"><input id="item-287" type="checkbox"/><span>Autoregressive training</span></label><label class="item" data-io="22" data-lo="6" data-text="next-token prediction"><input id="item-288" type="checkbox"/><span>Next-token prediction</span></label><label class="item" data-io="3" data-lo="7" data-text="pretraining"><input id="item-289" type="checkbox"/><span>Pretraining</span></label><label class="item" data-io="4" data-lo="8" data-text="fine-tuning"><input id="item-290" type="checkbox"/><span>Fine-tuning</span></label><label class="item" data-io="5" data-lo="9" data-text="instruction tuning"><input id="item-291" type="checkbox"/><span>Instruction tuning</span></label><label class="item" data-io="6" data-lo="10" data-text="lora"><input id="item-292" type="checkbox"/><span>LoRA</span></label><label class="item" data-io="7" data-lo="11" data-text="qlora"><input id="item-293" type="checkbox"/><span>QLoRA</span></label><label class="item" data-io="8" data-lo="12" data-text="peft"><input id="item-294" type="checkbox"/><span>PEFT</span></label><label class="item" data-io="9" data-lo="13" data-text="quantization"><input id="item-295" type="checkbox"/><span>Quantization</span></label><label class="item" data-io="20" data-lo="14" data-text="distillation"><input id="item-296" type="checkbox"/><span>Distillation</span></label><label class="item" data-io="10" data-lo="15" data-text="prompting"><input id="item-297" type="checkbox"/><span>Prompting</span></label><label class="item" data-io="12" data-lo="16" data-text="sampling temperature"><input id="item-300" type="checkbox"/><span>Sampling temperature</span></label><label class="item" data-io="13" data-lo="17" data-text="top-k sampling"><input id="item-301" type="checkbox"/><span>Top-k sampling</span></label><label class="item" data-io="14" data-lo="18" data-text="top-p sampling"><input id="item-302" type="checkbox"/><span>Top-p sampling</span></label><label class="item" data-io="15" data-lo="19" data-text="kv cache"><input id="item-299" type="checkbox"/><span>KV cache</span></label><label class="item" data-io="11" data-lo="20" data-text="retrieval-augmented generation (rag)"><input id="item-298" type="checkbox"/><span>Retrieval-Augmented Generation (RAG)</span></label><label class="item" data-io="16" data-lo="21" data-text="rlhf"><input id="item-303" type="checkbox"/><span>RLHF</span></label><label class="item" data-io="18" data-lo="22" data-text="reward models"><input id="item-306" type="checkbox"/><span>Reward models</span></label><label class="item" data-io="19" data-lo="23" data-text="preference optimization"><input id="item-304" type="checkbox"/><span>Preference optimization</span></label><label class="item" data-io="17" data-lo="24" data-text="dpo"><input id="item-305" type="checkbox"/><span>DPO</span></label></div></div>
+</section><section class="card" data-io-sec="24" data-lo-sec="24" id="24-transfer-learning">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Transfer Learning</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="understand why pretrained representations reduce data requirements"><input id="item-313" type="checkbox"/><span>Understand why pretrained representations reduce data requirements</span></label><label class="item" data-io="1" data-lo="1" data-text="load pretrained models"><input id="item-307" type="checkbox"/><span>Load pretrained models</span></label><label class="item" data-io="2" data-lo="2" data-text="replace prediction heads"><input id="item-308" type="checkbox"/><span>Replace prediction heads</span></label><label class="item" data-io="3" data-lo="3" data-text="freeze layers"><input id="item-309" type="checkbox"/><span>Freeze layers</span></label><label class="item" data-io="4" data-lo="4" data-text="unfreeze layers"><input id="item-310" type="checkbox"/><span>Unfreeze layers</span></label><label class="item" data-io="5" data-lo="5" data-text="use differential learning rates"><input id="item-312" type="checkbox"/><span>Use differential learning rates</span></label><label class="item" data-io="6" data-lo="6" data-text="fine-tune entire networks"><input id="item-311" type="checkbox"/><span>Fine-tune entire networks</span></label></div></div>
+</section><section class="card" data-io-sec="7" data-lo-sec="25" id="25-training-diagnostics">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Training Diagnostics</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="track training loss"><input id="item-314" type="checkbox"/><span>Track training loss</span></label><label class="item" data-io="1" data-lo="1" data-text="track validation loss"><input id="item-315" type="checkbox"/><span>Track validation loss</span></label><label class="item" data-io="2" data-lo="2" data-text="track accuracy/f1/etc."><input id="item-319" type="checkbox"/><span>Track accuracy/F1/etc.</span></label><label class="item" data-io="3" data-lo="3" data-text="track learning rate"><input id="item-316" type="checkbox"/><span>Track learning rate</span></label><label class="item" data-io="4" data-lo="4" data-text="track gradient norm"><input id="item-317" type="checkbox"/><span>Track gradient norm</span></label><label class="item" data-io="5" data-lo="5" data-text="track weight norm"><input id="item-318" type="checkbox"/><span>Track weight norm</span></label><label class="item" data-io="6" data-lo="6" data-text="track gpu utilization"><input id="item-320" type="checkbox"/><span>Track GPU utilization</span></label><label class="item" data-io="7" data-lo="7" data-text="track gpu memory"><input id="item-321" type="checkbox"/><span>Track GPU memory</span></label><label class="item" data-io="8" data-lo="8" data-text="track throughput"><input id="item-322" type="checkbox"/><span>Track throughput</span></label><label class="item" data-io="9" data-lo="9" data-text="track batch processing time"><input id="item-323" type="checkbox"/><span>Track batch processing time</span></label><label class="item" data-io="10" data-lo="10" data-text="read and interpret training curves"><input id="item-324" type="checkbox"/><span>Read and interpret training curves</span></label></div></div>
+</section><section class="card" data-io-sec="5" data-lo-sec="26" id="26-debugging-neural-networks">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Debugging Neural Networks</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><p class="note">If the model cannot memorize roughly 10–50 examples, suspect a bug in the model, data, or training loop.</p><div class="items"><label class="item" data-io="0" data-lo="0" data-text="try to overfit a tiny batch as a sanity test"><input id="item-338" type="checkbox"/><span>Try to overfit a tiny batch as a sanity test</span></label><label class="item" data-io="1" data-lo="1" data-text="check tensor shapes"><input id="item-325" type="checkbox"/><span>Check tensor shapes</span></label><label class="item" data-io="2" data-lo="2" data-text="check labels"><input id="item-326" type="checkbox"/><span>Check labels</span></label><label class="item" data-io="3" data-lo="3" data-text="check input scaling"><input id="item-333" type="checkbox"/><span>Check input scaling</span></label><label class="item" data-io="4" data-lo="4" data-text="check output/logit dimensions"><input id="item-334" type="checkbox"/><span>Check output/logit dimensions</span></label><label class="item" data-io="5" data-lo="5" data-text="check loss function"><input id="item-327" type="checkbox"/><span>Check loss function</span></label><label class="item" data-io="6" data-lo="6" data-text="check learning rate"><input id="item-328" type="checkbox"/><span>Check learning rate</span></label><label class="item" data-io="7" data-lo="7" data-text="check gradients"><input id="item-329" type="checkbox"/><span>Check gradients</span></label><label class="item" data-io="8" data-lo="8" data-text="check requires_grad"><input id="item-330" type="checkbox"/><span>Check requires_grad</span></label><label class="item" data-io="9" data-lo="9" data-text="check optimizer parameters"><input id="item-331" type="checkbox"/><span>Check optimizer parameters</span></label><label class="item" data-io="10" data-lo="10" data-text="check normalization"><input id="item-332" type="checkbox"/><span>Check normalization</span></label><label class="item" data-io="11" data-lo="11" data-text="check masks"><input id="item-335" type="checkbox"/><span>Check masks</span></label><label class="item" data-io="12" data-lo="12" data-text="check padding"><input id="item-336" type="checkbox"/><span>Check padding</span></label><label class="item" data-io="13" data-lo="13" data-text="check train/eval mode"><input id="item-337" type="checkbox"/><span>Check train/eval mode</span></label></div></div>
+</section><section class="card" data-io-sec="1" data-lo-sec="27" id="27-pytorch">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>PyTorch</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="tensor creation"><input id="item-339" type="checkbox"/><span>Tensor creation</span></label><label class="item" data-io="1" data-lo="1" data-text="shapes"><input id="item-340" type="checkbox"/><span>Shapes</span></label><label class="item" data-io="22" data-lo="2" data-text="reshape"><input id="item-341" type="checkbox"/><span>reshape</span></label><label class="item" data-io="23" data-lo="3" data-text="view"><input id="item-342" type="checkbox"/><span>view</span></label><label class="item" data-io="24" data-lo="4" data-text="permute"><input id="item-343" type="checkbox"/><span>permute</span></label><label class="item" data-io="25" data-lo="5" data-text="transpose"><input id="item-344" type="checkbox"/><span>transpose</span></label><label class="item" data-io="26" data-lo="6" data-text="unsqueeze"><input id="item-345" type="checkbox"/><span>unsqueeze</span></label><label class="item" data-io="27" data-lo="7" data-text="squeeze"><input id="item-346" type="checkbox"/><span>squeeze</span></label><label class="item" data-io="28" data-lo="8" data-text="broadcasting"><input id="item-347" type="checkbox"/><span>broadcasting</span></label><label class="item" data-io="2" data-lo="9" data-text="nn.module"><input id="item-348" type="checkbox"/><span>nn.Module</span></label><label class="item" data-io="3" data-lo="10" data-text="forward()"><input id="item-349" type="checkbox"/><span>forward()</span></label><label class="item" data-io="4" data-lo="11" data-text="nn.linear"><input id="item-350" type="checkbox"/><span>nn.Linear</span></label><label class="item" data-io="29" data-lo="12" data-text="nn.embedding"><input id="item-351" type="checkbox"/><span>nn.Embedding</span></label><label class="item" data-io="30" data-lo="13" data-text="nn.conv2d"><input id="item-352" type="checkbox"/><span>nn.Conv2d</span></label><label class="item" data-io="31" data-lo="14" data-text="nn.lstm"><input id="item-353" type="checkbox"/><span>nn.LSTM</span></label><label class="item" data-io="32" data-lo="15" data-text="nn.layernorm"><input id="item-354" type="checkbox"/><span>nn.LayerNorm</span></label><label class="item" data-io="33" data-lo="16" data-text="nn.dropout"><input id="item-355" type="checkbox"/><span>nn.Dropout</span></label><label class="item" data-io="10" data-lo="17" data-text=".backward()"><input id="item-356" type="checkbox"/><span>.backward()</span></label><label class="item" data-io="11" data-lo="18" data-text=".grad"><input id="item-357" type="checkbox"/><span>.grad</span></label><label class="item" data-io="12" data-lo="19" data-text=".zero_grad()"><input id="item-358" type="checkbox"/><span>.zero_grad()</span></label><label class="item" data-io="9" data-lo="20" data-text="optimizers"><input id="item-359" type="checkbox"/><span>optimizers</span></label><label class="item" data-io="17" data-lo="21" data-text="schedulers"><input id="item-360" type="checkbox"/><span>schedulers</span></label><label class="item" data-io="13" data-lo="22" data-text="dataset"><input id="item-361" type="checkbox"/><span>Dataset</span></label><label class="item" data-io="14" data-lo="23" data-text="dataloader"><input id="item-362" type="checkbox"/><span>DataLoader</span></label><label class="item" data-io="34" data-lo="24" data-text="collate_fn"><input id="item-363" type="checkbox"/><span>collate_fn</span></label><label class="item" data-io="15" data-lo="25" data-text="batching"><input id="item-364" type="checkbox"/><span>batching</span></label><label class="item" data-io="16" data-lo="26" data-text="shuffling"><input id="item-365" type="checkbox"/><span>shuffling</span></label><label class="item" data-io="35" data-lo="27" data-text="multiprocessing"><input id="item-366" type="checkbox"/><span>multiprocessing</span></label><label class="item" data-io="8" data-lo="28" data-text=".cpu()"><input id="item-367" type="checkbox"/><span>.cpu()</span></label><label class="item" data-io="7" data-lo="29" data-text=".cuda()"><input id="item-368" type="checkbox"/><span>.cuda()</span></label><label class="item" data-io="5" data-lo="30" data-text=".to(device)"><input id="item-369" type="checkbox"/><span>.to(device)</span></label><label class="item" data-io="6" data-lo="31" data-text="move tensors/models between devices"><input id="item-370" type="checkbox"/><span>Move tensors/models between devices</span></label><label class="item" data-io="18" data-lo="32" data-text="state_dict"><input id="item-371" type="checkbox"/><span>state_dict</span></label><label class="item" data-io="19" data-lo="33" data-text="checkpoints"><input id="item-372" type="checkbox"/><span>checkpoints</span></label><label class="item" data-io="20" data-lo="34" data-text="save optimizer state"><input id="item-373" type="checkbox"/><span>Save optimizer state</span></label><label class="item" data-io="21" data-lo="35" data-text="resume training"><input id="item-374" type="checkbox"/><span>Resume training</span></label></div></div>
+</section><section class="card" data-io-sec="31" data-lo-sec="28" id="28-gpu-amp-memory-management">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>GPU &amp; Memory Management</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="cpu ram vs vram"><input id="item-375" type="checkbox"/><span>CPU RAM vs VRAM</span></label><label class="item" data-io="1" data-lo="1" data-text="cuda"><input id="item-377" type="checkbox"/><span>CUDA</span></label><label class="item" data-io="2" data-lo="2" data-text="gpu memory allocation"><input id="item-376" type="checkbox"/><span>GPU memory allocation</span></label><label class="item" data-io="3" data-lo="3" data-text="batch-size memory tradeoffs"><input id="item-378" type="checkbox"/><span>Batch-size memory tradeoffs</span></label><label class="item" data-io="4" data-lo="4" data-text="torch.no_grad()"><input id="item-379" type="checkbox"/><span>torch.no_grad()</span></label><label class="item" data-io="5" data-lo="5" data-text="torch.inference_mode()"><input id="item-380" type="checkbox"/><span>torch.inference_mode()</span></label><label class="item" data-io="6" data-lo="6" data-text=".detach()"><input id="item-381" type="checkbox"/><span>.detach()</span></label><label class="item" data-io="7" data-lo="7" data-text=".cpu()"><input id="item-382" type="checkbox"/><span>.cpu()</span></label><label class="item" data-io="8" data-lo="8" data-text="deleting tensors"><input id="item-383" type="checkbox"/><span>Deleting tensors</span></label><label class="item" data-io="9" data-lo="9" data-text="avoid accidental computation-graph retention"><input id="item-384" type="checkbox"/><span>Avoid accidental computation-graph retention</span></label><label class="item" data-io="10" data-lo="10" data-text="know why losses.append(loss) can retain graphs"><input id="item-385" type="checkbox"/><span>Know why losses.append(loss) can retain graphs</span></label><label class="item" data-io="11" data-lo="11" data-text="use loss.item() when logging scalar loss values"><input id="item-386" type="checkbox"/><span>Use loss.item() when logging scalar loss values</span></label></div></div>
+</section><section class="card" data-io-sec="32" data-lo-sec="29" id="29-efficient-training">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Efficient Training</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="fp32"><input id="item-387" type="checkbox"/><span>FP32</span></label><label class="item" data-io="1" data-lo="1" data-text="fp16"><input id="item-388" type="checkbox"/><span>FP16</span></label><label class="item" data-io="2" data-lo="2" data-text="bf16"><input id="item-389" type="checkbox"/><span>BF16</span></label><label class="item" data-io="3" data-lo="3" data-text="automatic mixed precision"><input id="item-390" type="checkbox"/><span>Automatic Mixed Precision</span></label><label class="item" data-io="4" data-lo="4" data-text="understand speed/memory tradeoffs of mixed precision"><input id="item-393" type="checkbox"/><span>Understand speed/memory tradeoffs of mixed precision</span></label><label class="item" data-io="5" data-lo="5" data-text="gradient accumulation"><input id="item-391" type="checkbox"/><span>Gradient accumulation</span></label><label class="item" data-io="6" data-lo="6" data-text="gradient checkpointing"><input id="item-392" type="checkbox"/><span>Gradient checkpointing</span></label><label class="item" data-io="7" data-lo="7" data-text="understand compute/memory tradeoff of checkpointing"><input id="item-394" type="checkbox"/><span>Understand compute/memory tradeoff of checkpointing</span></label></div></div>
+</section><section class="card" data-io-sec="33" data-lo-sec="30" id="30-distributed-training">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Distributed Training</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="multi-gpu training"><input id="item-397" type="checkbox"/><span>Multi-GPU training</span></label><label class="item" data-io="1" data-lo="1" data-text="data parallelism"><input id="item-398" type="checkbox"/><span>Data parallelism</span></label><label class="item" data-io="2" data-lo="2" data-text="dataparallel"><input id="item-395" type="checkbox"/><span>DataParallel</span></label><label class="item" data-io="3" data-lo="3" data-text="distributeddataparallel"><input id="item-396" type="checkbox"/><span>DistributedDataParallel</span></label><label class="item" data-io="4" data-lo="4" data-text="fsdp"><input id="item-402" type="checkbox"/><span>FSDP</span></label><label class="item" data-io="5" data-lo="5" data-text="model parallelism"><input id="item-399" type="checkbox"/><span>Model parallelism</span></label><label class="item" data-io="6" data-lo="6" data-text="tensor parallelism"><input id="item-400" type="checkbox"/><span>Tensor parallelism</span></label><label class="item" data-io="7" data-lo="7" data-text="pipeline parallelism"><input id="item-401" type="checkbox"/><span>Pipeline parallelism</span></label><label class="item" data-io="8" data-lo="8" data-text="distributed checkpoints"><input id="item-403" type="checkbox"/><span>Distributed checkpoints</span></label></div></div>
+</section><section class="card" data-io-sec="39" data-lo-sec="31" id="31-experiments-amp-reproducibility">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Experiments &amp; Reproducibility</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="random seeds"><input id="item-404" type="checkbox"/><span>Random seeds</span></label><label class="item" data-io="1" data-lo="1" data-text="git"><input id="item-408" type="checkbox"/><span>Git</span></label><label class="item" data-io="2" data-lo="2" data-text="hyperparameter logging"><input id="item-406" type="checkbox"/><span>Hyperparameter logging</span></label><label class="item" data-io="3" data-lo="3" data-text="dataset versioning"><input id="item-405" type="checkbox"/><span>Dataset versioning</span></label><label class="item" data-io="4" data-lo="4" data-text="model checkpointing"><input id="item-407" type="checkbox"/><span>Model checkpointing</span></label><label class="item" data-io="5" data-lo="5" data-text="experiment tracking"><input id="item-409" type="checkbox"/><span>Experiment tracking</span></label><label class="item" data-io="6" data-lo="6" data-text="tensorboard"><input id="item-410" type="checkbox"/><span>TensorBoard</span></label><label class="item" data-io="7" data-lo="7" data-text="weights &amp; biases"><input id="item-411" type="checkbox"/><span>Weights &amp; Biases</span></label><label class="item" data-io="8" data-lo="8" data-text="mlflow"><input id="item-412" type="checkbox"/><span>MLflow</span></label><label class="item" data-io="9" data-lo="9" data-text="be able to identify which code/data/config produced a result"><input id="item-413" type="checkbox"/><span>Be able to identify which code/data/config produced a result</span></label></div></div>
+</section><section class="card" data-io-sec="40" data-lo-sec="32" id="32-model-checkpointing">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Model Checkpointing</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="save model weights"><input id="item-414" type="checkbox"/><span>Save model weights</span></label><label class="item" data-io="1" data-lo="1" data-text="save optimizer state"><input id="item-415" type="checkbox"/><span>Save optimizer state</span></label><label class="item" data-io="2" data-lo="2" data-text="save scheduler state"><input id="item-416" type="checkbox"/><span>Save scheduler state</span></label><label class="item" data-io="3" data-lo="3" data-text="save epoch"><input id="item-417" type="checkbox"/><span>Save epoch</span></label><label class="item" data-io="4" data-lo="4" data-text="save training metrics"><input id="item-418" type="checkbox"/><span>Save training metrics</span></label><label class="item" data-io="5" data-lo="5" data-text="save hyperparameters"><input id="item-419" type="checkbox"/><span>Save hyperparameters</span></label><label class="item" data-io="6" data-lo="6" data-text="resume training from a checkpoint"><input id="item-420" type="checkbox"/><span>Resume training from a checkpoint</span></label></div></div>
+</section><section class="card" data-io-sec="36" data-lo-sec="33" id="33-inference-engineering">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Inference Engineering</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="model.eval()"><input id="item-421" type="checkbox"/><span>model.eval()</span></label><label class="item" data-io="1" data-lo="1" data-text="torch.no_grad()"><input id="item-422" type="checkbox"/><span>torch.no_grad()</span></label><label class="item" data-io="2" data-lo="2" data-text="batch inference"><input id="item-423" type="checkbox"/><span>Batch inference</span></label><label class="item" data-io="3" data-lo="3" data-text="latency"><input id="item-424" type="checkbox"/><span>Latency</span></label><label class="item" data-io="4" data-lo="4" data-text="throughput"><input id="item-425" type="checkbox"/><span>Throughput</span></label><label class="item" data-io="5" data-lo="5" data-text="understand latency vs throughput"><input id="item-429" type="checkbox"/><span>Understand latency vs throughput</span></label><label class="item" data-io="6" data-lo="6" data-text="memory consumption"><input id="item-426" type="checkbox"/><span>Memory consumption</span></label><label class="item" data-io="7" data-lo="7" data-text="model warm-up"><input id="item-427" type="checkbox"/><span>Model warm-up</span></label><label class="item" data-io="8" data-lo="8" data-text="dynamic batching"><input id="item-428" type="checkbox"/><span>Dynamic batching</span></label></div></div>
+</section><section class="card" data-io-sec="37" data-lo-sec="34" id="34-model-compression">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Model Compression</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="quantization"><input id="item-430" type="checkbox"/><span>Quantization</span></label><label class="item" data-io="1" data-lo="1" data-text="pruning"><input id="item-431" type="checkbox"/><span>Pruning</span></label><label class="item" data-io="2" data-lo="2" data-text="knowledge distillation"><input id="item-432" type="checkbox"/><span>Knowledge distillation</span></label><label class="item" data-io="3" data-lo="3" data-text="low-rank approximations"><input id="item-433" type="checkbox"/><span>Low-rank approximations</span></label><label class="item" data-io="4" data-lo="4" data-text="fp16 quantization"><input id="item-434" type="checkbox"/><span>FP16 quantization</span></label><label class="item" data-io="5" data-lo="5" data-text="bf16"><input id="item-435" type="checkbox"/><span>BF16</span></label><label class="item" data-io="6" data-lo="6" data-text="int8"><input id="item-436" type="checkbox"/><span>INT8</span></label><label class="item" data-io="7" data-lo="7" data-text="int4"><input id="item-437" type="checkbox"/><span>INT4</span></label></div></div>
+</section><section class="card" data-io-sec="38" data-lo-sec="35" id="35-deployment">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Deployment</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="linux"><input id="item-441" type="checkbox"/><span>Linux</span></label><label class="item" data-io="1" data-lo="1" data-text="rest apis"><input id="item-438" type="checkbox"/><span>REST APIs</span></label><label class="item" data-io="2" data-lo="2" data-text="fastapi"><input id="item-439" type="checkbox"/><span>FastAPI</span></label><label class="item" data-io="3" data-lo="3" data-text="docker"><input id="item-440" type="checkbox"/><span>Docker</span></label><label class="item" data-io="4" data-lo="4" data-text="nvidia cuda environment"><input id="item-442" type="checkbox"/><span>NVIDIA CUDA environment</span></label><label class="item" data-io="5" data-lo="5" data-text="model serving"><input id="item-443" type="checkbox"/><span>Model serving</span></label><label class="item" data-io="6" data-lo="6" data-text="logging"><input id="item-444" type="checkbox"/><span>Logging</span></label><label class="item" data-io="7" data-lo="7" data-text="monitoring"><input id="item-445" type="checkbox"/><span>Monitoring</span></label><label class="item" data-io="8" data-lo="8" data-text="pytorch export / torchscript ecosystem"><input id="item-448" type="checkbox"/><span>PyTorch export / TorchScript ecosystem</span></label><label class="item" data-io="9" data-lo="9" data-text="onnx"><input id="item-446" type="checkbox"/><span>ONNX</span></label><label class="item" data-io="10" data-lo="10" data-text="tensorrt"><input id="item-447" type="checkbox"/><span>TensorRT</span></label><label class="item" data-io="11" data-lo="11" data-text="triton inference server"><input id="item-449" type="checkbox"/><span>Triton Inference Server</span></label></div></div>
+</section><section class="card" data-io-sec="4" data-lo-sec="36" id="36-linux-amp-engineering-skills">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Linux &amp; Engineering Skills</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="linux terminal"><input id="item-450" type="checkbox"/><span>Linux terminal</span></label><label class="item" data-io="1" data-lo="1" data-text="bash"><input id="item-451" type="checkbox"/><span>Bash</span></label><label class="item" data-io="2" data-lo="2" data-text="ssh"><input id="item-452" type="checkbox"/><span>SSH</span></label><label class="item" data-io="3" data-lo="3" data-text="processes"><input id="item-453" type="checkbox"/><span>Processes</span></label><label class="item" data-io="4" data-lo="4" data-text="environment variables"><input id="item-454" type="checkbox"/><span>Environment variables</span></label><label class="item" data-io="5" data-lo="5" data-text="file permissions"><input id="item-455" type="checkbox"/><span>File permissions</span></label><label class="item" data-io="6" data-lo="6" data-text="nvidia-smi"><input id="item-456" type="checkbox"/><span>nvidia-smi</span></label><label class="item" data-io="7" data-lo="7" data-text="virtual environments"><input id="item-457" type="checkbox"/><span>Virtual environments</span></label><label class="item" data-io="8" data-lo="8" data-text="conda / venv"><input id="item-458" type="checkbox"/><span>Conda / venv</span></label><label class="item" data-io="9" data-lo="9" data-text="pip"><input id="item-459" type="checkbox"/><span>pip</span></label><label class="item" data-io="10" data-lo="10" data-text="git"><input id="item-460" type="checkbox"/><span>Git</span></label><label class="item" data-io="11" data-lo="11" data-text="write maintainable projects outside giant notebooks"><input id="item-461" type="checkbox"/><span>Write maintainable projects outside giant notebooks</span></label></div></div>
+</section><section class="card" data-io-sec="2" data-lo-sec="37" id="37-python-engineering">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Python Engineering</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="functions"><input id="item-464" type="checkbox"/><span>Functions</span></label><label class="item" data-io="1" data-lo="1" data-text="classes"><input id="item-462" type="checkbox"/><span>Classes</span></label><label class="item" data-io="5" data-lo="2" data-text="inheritance"><input id="item-463" type="checkbox"/><span>Inheritance</span></label><label class="item" data-io="2" data-lo="3" data-text="exception handling"><input id="item-472" type="checkbox"/><span>Exception handling</span></label><label class="item" data-io="6" data-lo="4" data-text="iterators"><input id="item-466" type="checkbox"/><span>Iterators</span></label><label class="item" data-io="7" data-lo="5" data-text="generators"><input id="item-467" type="checkbox"/><span>Generators</span></label><label class="item" data-io="8" data-lo="6" data-text="context managers"><input id="item-468" type="checkbox"/><span>Context managers</span></label><label class="item" data-io="9" data-lo="7" data-text="decorators"><input id="item-465" type="checkbox"/><span>Decorators</span></label><label class="item" data-io="10" data-lo="8" data-text="type hints"><input id="item-469" type="checkbox"/><span>Type hints</span></label><label class="item" data-io="11" data-lo="9" data-text="dataclasses"><input id="item-470" type="checkbox"/><span>Dataclasses</span></label><label class="item" data-io="12" data-lo="10" data-text="packages/modules"><input id="item-471" type="checkbox"/><span>Packages/modules</span></label><label class="item" data-io="3" data-lo="11" data-text="numpy"><input id="item-473" type="checkbox"/><span>NumPy</span></label><label class="item" data-io="4" data-lo="12" data-text="pandas"><input id="item-474" type="checkbox"/><span>Pandas</span></label><label class="item" data-io="13" data-lo="13" data-text="matplotlib"><input id="item-475" type="checkbox"/><span>Matplotlib</span></label><label class="item" data-io="14" data-lo="14" data-text="scikit-learn"><input id="item-476" type="checkbox"/><span>scikit-learn</span></label></div></div>
+</section><section class="card" data-io-sec="3" data-lo-sec="38" id="38-software-engineering-for-ml">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Software Engineering for ML</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="git"><input id="item-477" type="checkbox"/><span>Git</span></label><label class="item" data-io="1" data-lo="1" data-text="branching"><input id="item-478" type="checkbox"/><span>Branching</span></label><label class="item" data-io="2" data-lo="2" data-text="unit testing"><input id="item-479" type="checkbox"/><span>Unit testing</span></label><label class="item" data-io="3" data-lo="3" data-text="logging"><input id="item-480" type="checkbox"/><span>Logging</span></label><label class="item" data-io="4" data-lo="4" data-text="config files"><input id="item-481" type="checkbox"/><span>Config files</span></label><label class="item" data-io="5" data-lo="5" data-text="cli arguments"><input id="item-482" type="checkbox"/><span>CLI arguments</span></label><label class="item" data-io="6" data-lo="6" data-text="reusable modules"><input id="item-483" type="checkbox"/><span>Reusable modules</span></label><label class="item" data-io="7" data-lo="7" data-text="organize projects into configs/data/datasets/models/training/evaluation/inference/utils/checkpoints"><input id="item-484" type="checkbox"/><span>Organize projects into configs/data/datasets/models/training/evaluation/inference/utils/checkpoints</span></label></div></div>
+</section><section class="card" data-io-sec="34" data-lo-sec="39" id="39-data-pipelines">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Data Pipelines</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="understand disk → dataset → dataloader → cpu batch → gpu batch → forward → loss → backward → optimizer"><input id="item-491" type="checkbox"/><span>Understand Disk → Dataset → DataLoader → CPU batch → GPU batch → Forward → Loss → Backward → Optimizer</span></label><label class="item" data-io="1" data-lo="1" data-text="lazy loading"><input id="item-485" type="checkbox"/><span>Lazy loading</span></label><label class="item" data-io="2" data-lo="2" data-text="dataloader workers"><input id="item-487" type="checkbox"/><span>DataLoader workers</span></label><label class="item" data-io="3" data-lo="3" data-text="prefetching"><input id="item-486" type="checkbox"/><span>Prefetching</span></label><label class="item" data-io="4" data-lo="4" data-text="pinned memory"><input id="item-489" type="checkbox"/><span>Pinned memory</span></label><label class="item" data-io="5" data-lo="5" data-text="caching"><input id="item-488" type="checkbox"/><span>Caching</span></label><label class="item" data-io="6" data-lo="6" data-text="streaming datasets"><input id="item-490" type="checkbox"/><span>Streaming datasets</span></label></div></div>
+</section><section class="card" data-io-sec="35" data-lo-sec="40" id="40-profiling-amp-performance">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Profiling &amp; Performance</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="nvidia-smi"><input id="item-493" type="checkbox"/><span>nvidia-smi</span></label><label class="item" data-io="1" data-lo="1" data-text="pytorch profiler"><input id="item-492" type="checkbox"/><span>PyTorch profiler</span></label><label class="item" data-io="2" data-lo="2" data-text="gpu utilization"><input id="item-494" type="checkbox"/><span>GPU utilization</span></label><label class="item" data-io="3" data-lo="3" data-text="memory utilization"><input id="item-495" type="checkbox"/><span>Memory utilization</span></label><label class="item" data-io="4" data-lo="4" data-text="identify disk bottlenecks"><input id="item-497" type="checkbox"/><span>Identify disk bottlenecks</span></label><label class="item" data-io="5" data-lo="5" data-text="identify cpu preprocessing bottlenecks"><input id="item-498" type="checkbox"/><span>Identify CPU preprocessing bottlenecks</span></label><label class="item" data-io="6" data-lo="6" data-text="identify cpu→gpu transfer bottlenecks"><input id="item-499" type="checkbox"/><span>Identify CPU→GPU transfer bottlenecks</span></label><label class="item" data-io="7" data-lo="7" data-text="identify gpu compute bottlenecks"><input id="item-500" type="checkbox"/><span>Identify GPU compute bottlenecks</span></label><label class="item" data-io="8" data-lo="8" data-text="dataloader worker tuning"><input id="item-496" type="checkbox"/><span>DataLoader worker tuning</span></label></div></div>
+</section><section class="card" data-io-sec="46" data-lo-sec="41" id="41-numerical-stability">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Numerical Stability</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="floating-point precision"><input id="item-501" type="checkbox"/><span>Floating-point precision</span></label><label class="item" data-io="1" data-lo="1" data-text="underflow"><input id="item-502" type="checkbox"/><span>Underflow</span></label><label class="item" data-io="2" data-lo="2" data-text="overflow"><input id="item-503" type="checkbox"/><span>Overflow</span></label><label class="item" data-io="3" data-lo="3" data-text="epsilon terms"><input id="item-508" type="checkbox"/><span>Epsilon terms</span></label><label class="item" data-io="4" data-lo="4" data-text="log probabilities"><input id="item-504" type="checkbox"/><span>Log probabilities</span></label><label class="item" data-io="5" data-lo="5" data-text="stable softmax"><input id="item-505" type="checkbox"/><span>Stable softmax</span></label><label class="item" data-io="6" data-lo="6" data-text="stable cross entropy"><input id="item-506" type="checkbox"/><span>Stable cross entropy</span></label><label class="item" data-io="7" data-lo="7" data-text="gradient scaling"><input id="item-507" type="checkbox"/><span>Gradient scaling</span></label><label class="item" data-io="8" data-lo="8" data-text="understand why numerically stable formulations matter"><input id="item-509" type="checkbox"/><span>Understand why numerically stable formulations matter</span></label></div></div>
+</section><section class="card" data-io-sec="47" data-lo-sec="42" id="42-model-capacity">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Model Capacity</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="number of parameters"><input id="item-510" type="checkbox"/><span>Number of parameters</span></label><label class="item" data-io="1" data-lo="1" data-text="depth"><input id="item-511" type="checkbox"/><span>Depth</span></label><label class="item" data-io="2" data-lo="2" data-text="width"><input id="item-512" type="checkbox"/><span>Width</span></label><label class="item" data-io="3" data-lo="3" data-text="embedding dimensions"><input id="item-513" type="checkbox"/><span>Embedding dimensions</span></label><label class="item" data-io="4" data-lo="4" data-text="hidden dimensions"><input id="item-514" type="checkbox"/><span>Hidden dimensions</span></label><label class="item" data-io="5" data-lo="5" data-text="attention heads"><input id="item-515" type="checkbox"/><span>Attention heads</span></label><label class="item" data-io="6" data-lo="6" data-text="understand capacity vs underfitting"><input id="item-516" type="checkbox"/><span>Understand capacity vs underfitting</span></label><label class="item" data-io="7" data-lo="7" data-text="understand capacity vs generalization"><input id="item-517" type="checkbox"/><span>Understand capacity vs generalization</span></label><label class="item" data-io="8" data-lo="8" data-text="understand capacity vs overfitting risk"><input id="item-518" type="checkbox"/><span>Understand capacity vs overfitting risk</span></label></div></div>
+</section><section class="card" data-io-sec="8" data-lo-sec="43" id="43-bias-variance-tradeoff">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Bias–Variance Tradeoff</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="recognize high bias"><input id="item-519" type="checkbox"/><span>Recognize high bias</span></label><label class="item" data-io="1" data-lo="1" data-text="recognize high variance"><input id="item-520" type="checkbox"/><span>Recognize high variance</span></label><label class="item" data-io="2" data-lo="2" data-text="relate training/validation errors to bias/variance"><input id="item-521" type="checkbox"/><span>Relate training/validation errors to bias/variance</span></label><label class="item" data-io="3" data-lo="3" data-text="choose interventions based on bias/variance diagnosis"><input id="item-522" type="checkbox"/><span>Choose interventions based on bias/variance diagnosis</span></label></div></div>
+</section><section class="card" data-io-sec="41" data-lo-sec="44" id="44-ablation-studies">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Ablation Studies</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="remove components systematically"><input id="item-523" type="checkbox"/><span>Remove components systematically</span></label><label class="item" data-io="1" data-lo="1" data-text="measure whether dropout contributes"><input id="item-524" type="checkbox"/><span>Measure whether dropout contributes</span></label><label class="item" data-io="2" data-lo="2" data-text="measure whether augmentation contributes"><input id="item-525" type="checkbox"/><span>Measure whether augmentation contributes</span></label><label class="item" data-io="3" data-lo="3" data-text="measure whether scheduler contributes"><input id="item-526" type="checkbox"/><span>Measure whether scheduler contributes</span></label><label class="item" data-io="4" data-lo="4" data-text="measure whether attention contributes"><input id="item-527" type="checkbox"/><span>Measure whether attention contributes</span></label><label class="item" data-io="5" data-lo="5" data-text="use ablations to determine what actually improves performance"><input id="item-528" type="checkbox"/><span>Use ablations to determine what actually improves performance</span></label></div></div>
+</section><section class="card" data-io-sec="42" data-lo-sec="45" id="45-baselines">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Baselines</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="establish a simple baseline before complex models"><input id="item-529" type="checkbox"/><span>Establish a simple baseline before complex models</span></label><label class="item" data-io="1" data-lo="1" data-text="compare simple and complex models fairly"><input id="item-530" type="checkbox"/><span>Compare simple and complex models fairly</span></label><label class="item" data-io="2" data-lo="2" data-text="measure whether additional complexity is worthwhile"><input id="item-531" type="checkbox"/><span>Measure whether additional complexity is worthwhile</span></label></div></div>
+</section><section class="card" data-io-sec="43" data-lo-sec="46" id="46-error-analysis">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Error Analysis</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="inspect which classes fail"><input id="item-532" type="checkbox"/><span>Inspect which classes fail</span></label><label class="item" data-io="1" data-lo="1" data-text="inspect which samples fail"><input id="item-533" type="checkbox"/><span>Inspect which samples fail</span></label><label class="item" data-io="2" data-lo="2" data-text="check for incorrect labels"><input id="item-534" type="checkbox"/><span>Check for incorrect labels</span></label><label class="item" data-io="3" data-lo="3" data-text="check underrepresented inputs"><input id="item-535" type="checkbox"/><span>Check underrepresented inputs</span></label><label class="item" data-io="4" data-lo="4" data-text="evaluate performance by data subset"><input id="item-536" type="checkbox"/><span>Evaluate performance by data subset</span></label><label class="item" data-io="5" data-lo="5" data-text="check preprocessing-related failures"><input id="item-537" type="checkbox"/><span>Check preprocessing-related failures</span></label><label class="item" data-io="6" data-lo="6" data-text="use error analysis to guide improvements"><input id="item-538" type="checkbox"/><span>Use error analysis to guide improvements</span></label></div></div>
+</section><section class="card" data-io-sec="44" data-lo-sec="47" id="47-reading-research-papers">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Reading Research Papers</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="read abstracts efficiently"><input id="item-539" type="checkbox"/><span>Read abstracts efficiently</span></label><label class="item" data-io="1" data-lo="1" data-text="understand architecture diagrams"><input id="item-540" type="checkbox"/><span>Understand architecture diagrams</span></label><label class="item" data-io="2" data-lo="2" data-text="follow key equations"><input id="item-542" type="checkbox"/><span>Follow key equations</span></label><label class="item" data-io="3" data-lo="3" data-text="understand methodology"><input id="item-541" type="checkbox"/><span>Understand methodology</span></label><label class="item" data-io="4" data-lo="4" data-text="evaluate experiments"><input id="item-543" type="checkbox"/><span>Evaluate experiments</span></label><label class="item" data-io="5" data-lo="5" data-text="read ablation studies"><input id="item-544" type="checkbox"/><span>Read ablation studies</span></label><label class="item" data-io="6" data-lo="6" data-text="read limitations"><input id="item-545" type="checkbox"/><span>Read limitations</span></label><label class="item" data-io="7" data-lo="7" data-text="understand alexnet conceptually"><input id="item-546" type="checkbox"/><span>Understand AlexNet conceptually</span></label><label class="item" data-io="8" data-lo="8" data-text="understand lstm papers conceptually"><input id="item-548" type="checkbox"/><span>Understand LSTM papers conceptually</span></label><label class="item" data-io="9" data-lo="9" data-text="understand resnet conceptually"><input id="item-547" type="checkbox"/><span>Understand ResNet conceptually</span></label><label class="item" data-io="10" data-lo="10" data-text="understand attention is all you need conceptually"><input id="item-549" type="checkbox"/><span>Understand Attention Is All You Need conceptually</span></label><label class="item" data-io="11" data-lo="11" data-text="understand bert conceptually"><input id="item-550" type="checkbox"/><span>Understand BERT conceptually</span></label><label class="item" data-io="12" data-lo="12" data-text="understand gpt-style autoregressive models conceptually"><input id="item-551" type="checkbox"/><span>Understand GPT-style autoregressive models conceptually</span></label><label class="item" data-io="13" data-lo="13" data-text="understand vision transformer conceptually"><input id="item-552" type="checkbox"/><span>Understand Vision Transformer conceptually</span></label><label class="item" data-io="14" data-lo="14" data-text="understand lora conceptually"><input id="item-553" type="checkbox"/><span>Understand LoRA conceptually</span></label><label class="item" data-io="15" data-lo="15" data-text="translate a paper into working code"><input id="item-554" type="checkbox"/><span>Translate a paper into working code</span></label></div></div>
+</section><section class="card" data-io-sec="6" data-lo-sec="48" id="48-training-intuition">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Training Intuition</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="check learning rate before random architecture changes"><input id="item-559" type="checkbox"/><span>Check learning rate before random architecture changes</span></label><label class="item" data-io="1" data-lo="1" data-text="diagnose when training loss does not decrease"><input id="item-555" type="checkbox"/><span>Diagnose when training loss does not decrease</span></label><label class="item" data-io="2" data-lo="2" data-text="diagnose when both train and validation losses remain high"><input id="item-557" type="checkbox"/><span>Diagnose when both train and validation losses remain high</span></label><label class="item" data-io="3" data-lo="3" data-text="diagnose when train loss improves but validation does not"><input id="item-556" type="checkbox"/><span>Diagnose when train loss improves but validation does not</span></label><label class="item" data-io="4" data-lo="4" data-text="diagnose nan loss"><input id="item-558" type="checkbox"/><span>Diagnose NaN loss</span></label><label class="item" data-io="5" data-lo="5" data-text="check gradients"><input id="item-560" type="checkbox"/><span>Check gradients</span></label><label class="item" data-io="6" data-lo="6" data-text="check loss implementation"><input id="item-561" type="checkbox"/><span>Check loss implementation</span></label><label class="item" data-io="7" data-lo="7" data-text="check input scaling"><input id="item-562" type="checkbox"/><span>Check input scaling</span></label><label class="item" data-io="8" data-lo="8" data-text="check initialization"><input id="item-563" type="checkbox"/><span>Check initialization</span></label><label class="item" data-io="9" data-lo="9" data-text="check data quality/distribution"><input id="item-564" type="checkbox"/><span>Check data quality/distribution</span></label><label class="item" data-io="10" data-lo="10" data-text="check regularization"><input id="item-565" type="checkbox"/><span>Check regularization</span></label></div></div>
+</section><section class="card" data-io-sec="49" data-lo-sec="49" id="49-skills-that-separate-a-strong-dl-engineer">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Skills That Separate a Strong DL Engineer</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="understand tensor dimensions instinctively"><input id="item-566" type="checkbox"/><span>Understand tensor dimensions instinctively</span></label><label class="item" data-io="1" data-lo="1" data-text="translate mathematics into pytorch"><input id="item-577" type="checkbox"/><span>Translate mathematics into PyTorch</span></label><label class="item" data-io="2" data-lo="2" data-text="understand gradients and backpropagation"><input id="item-567" type="checkbox"/><span>Understand gradients and backpropagation</span></label><label class="item" data-io="3" data-lo="3" data-text="debug models systematically"><input id="item-568" type="checkbox"/><span>Debug models systematically</span></label><label class="item" data-io="4" data-lo="4" data-text="diagnose training curves"><input id="item-569" type="checkbox"/><span>Diagnose training curves</span></label><label class="item" data-io="5" data-lo="5" data-text="identify overfitting/underfitting"><input id="item-571" type="checkbox"/><span>Identify overfitting/underfitting</span></label><label class="item" data-io="6" data-lo="6" data-text="choose appropriate losses and metrics"><input id="item-572" type="checkbox"/><span>Choose appropriate losses and metrics</span></label><label class="item" data-io="7" data-lo="7" data-text="control learning rates"><input id="item-573" type="checkbox"/><span>Control learning rates</span></label><label class="item" data-io="8" data-lo="8" data-text="design good data pipelines"><input id="item-570" type="checkbox"/><span>Design good data pipelines</span></label><label class="item" data-io="9" data-lo="9" data-text="manage gpu memory"><input id="item-574" type="checkbox"/><span>Manage GPU memory</span></label><label class="item" data-io="10" data-lo="10" data-text="profile performance"><input id="item-578" type="checkbox"/><span>Profile performance</span></label><label class="item" data-io="11" data-lo="11" data-text="run reproducible experiments"><input id="item-575" type="checkbox"/><span>Run reproducible experiments</span></label><label class="item" data-io="12" data-lo="12" data-text="build strong baselines"><input id="item-579" type="checkbox"/><span>Build strong baselines</span></label><label class="item" data-io="13" data-lo="13" data-text="perform error analysis"><input id="item-580" type="checkbox"/><span>Perform error analysis</span></label><label class="item" data-io="14" data-lo="14" data-text="read papers"><input id="item-576" type="checkbox"/><span>Read papers</span></label><label class="item" data-io="15" data-lo="15" data-text="deploy models"><input id="item-581" type="checkbox"/><span>Deploy models</span></label></div></div>
+</section><section class="card" data-io-sec="50" data-lo-sec="50" id="50-ultimate-architecture-test">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Ultimate Architecture Test</h2></div>
+<span class="section-progress"></span>
+</div>
+<div class="section-body"><div class="items"><label class="item" data-io="0" data-lo="0" data-text="can i state the input and output tensor dimensions?"><input id="item-582" type="checkbox"/><span>Can I state the input and output tensor dimensions?</span></label><label class="item" data-io="1" data-lo="1" data-text="can i identify the parameters the model learns?"><input id="item-583" type="checkbox"/><span>Can I identify the parameters the model learns?</span></label><label class="item" data-io="2" data-lo="2" data-text="can i explain the mathematical operation performed by every layer?"><input id="item-584" type="checkbox"/><span>Can I explain the mathematical operation performed by every layer?</span></label><label class="item" data-io="3" data-lo="3" data-text="can i state the loss being optimized?"><input id="item-585" type="checkbox"/><span>Can I state the loss being optimized?</span></label><label class="item" data-io="4" data-lo="4" data-text="can i explain how gradients reach each parameter?"><input id="item-586" type="checkbox"/><span>Can I explain how gradients reach each parameter?</span></label><label class="item" data-io="5" data-lo="5" data-text="can i identify likely causes of training failure?"><input id="item-587" type="checkbox"/><span>Can I identify likely causes of training failure?</span></label><label class="item" data-io="6" data-lo="6" data-text="can i recognize overfitting?"><input id="item-588" type="checkbox"/><span>Can I recognize overfitting?</span></label><label class="item" data-io="7" data-lo="7" data-text="can i improve generalization?"><input id="item-589" type="checkbox"/><span>Can I improve generalization?</span></label><label class="item" data-io="8" data-lo="8" data-text="can i estimate or reason about gpu memory requirements?"><input id="item-590" type="checkbox"/><span>Can I estimate or reason about GPU memory requirements?</span></label><label class="item" data-io="9" data-lo="9" data-text="can i train it efficiently on millions of samples?"><input id="item-591" type="checkbox"/><span>Can I train it efficiently on millions of samples?</span></label><label class="item" data-io="10" data-lo="10" data-text="can i evaluate whether it actually works?"><input id="item-592" type="checkbox"/><span>Can I evaluate whether it actually works?</span></label><label class="item" data-io="11" data-lo="11" data-text="can i deploy it?"><input id="item-593" type="checkbox"/><span>Can I deploy it?</span></label></div></div>
+</section>
+<section class="card" data-io-sec="51" data-lo-sec="51" id="recommended-learning-order">
+<div aria-expanded="true" class="section-head" role="button" tabindex="0">
+<div class="section-title-wrap"><span class="chevron">⌄</span><span class="rank-badge"></span><h2>Recommended Learning Order</h2></div>
+<span class="section-progress">ROADMAP</span>
+</div>
+<div class="section-body"><div class="learning-wrap"><ol class="learning"><li>Python</li><li>NumPy + tensor mathematics</li><li>Linear algebra + calculus</li><li>Basic neural networks</li><li>Forward propagation</li><li>Backpropagation</li><li>Loss functions</li><li>Optimization</li><li>PyTorch</li><li>Training loops</li><li>Regularization + generalization</li><li>CNNs</li><li>RNNs</li><li>LSTMs / GRUs</li><li>Embeddings / Word2Vec</li><li>Attention</li><li>Transformers</li><li>Transfer learning</li><li>Modern LLM techniques</li><li>Efficient GPU training</li><li>Distributed training</li><li>Inference</li><li>Deployment / MLOps</li></ol></div></div>
+</section>
+<p class="footer-note">SYSTEM NOTE // checked skills and collapsed groups persist locally in your browser.</p>
+</main>
+<aside class="right-rail">
+<div class="right-sticky">
+<div class="rail-card">
+<div class="rail-title">FOCUS BOARD</div>
+<div class="todo-wrap">
+<div class="todo-help">Drag a skill from the learning list into any column. It is <b>copied only</b>; the original stays in the learning list. Cards here can be moved between statuses.</div>
+<div class="todo-column" data-status="planned">
+<div class="todo-col-head"><span>PLANNED</span><span class="todo-count">0</span></div>
+<div class="todo-drop" data-status="planned"></div>
+</div>
+<div class="todo-column" data-status="works">
+<div class="todo-col-head"><span>IN WORKS</span><span class="todo-count">0</span></div>
+<div class="todo-drop" data-status="works"></div>
+</div>
+<div class="todo-column" data-status="done">
+<div class="todo-col-head"><span>DONE</span><span class="todo-count">0</span></div>
+<div class="todo-drop" data-status="done"></div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<script>
+const boxes=[...document.querySelectorAll('input[type=checkbox]')];
+const STORE='dl-engineer-checklist-v2';
+const COLLAPSE_STORE='dl-engineer-collapsed-v3';
+const THEME_STORE='dl-engineer-theme-v2';
+const TODO_STORE='dl-engineer-focus-board-v1';
+const ORDER_STORE='dl-engineer-order-mode-v1';
+
+function applyTheme(theme){
+  const light=theme==='light';
+  document.body.classList.toggle('light-theme',light);
+  const btn=document.getElementById('themeToggle');
+  if(btn) btn.textContent=light?'☾ Dark':'☀ Light';
+  localStorage.setItem(THEME_STORE,theme);
+}
+function loadTheme(){
+  const saved=localStorage.getItem(THEME_STORE);
+  applyTheme(saved==='light'||saved==='dark' ? saved : 'light');
+}
+function load(){
+  let state={};try{state=JSON.parse(localStorage.getItem(STORE)||'{}')}catch(e){}
+  boxes.forEach(b=>b.checked=!!state[b.id]);
+  let collapsed=[];try{collapsed=JSON.parse(localStorage.getItem(COLLAPSE_STORE)||'[]')}catch(e){}
+  document.querySelectorAll('.card').forEach(card=>{if(collapsed.includes(card.id))setCollapsed(card,true,false)});
+}
+function save(){
+  localStorage.setItem(STORE,JSON.stringify(Object.fromEntries(boxes.map(b=>[b.id,b.checked]))));
+  updateProgress();
+}
+function saveCollapsed(){
+  localStorage.setItem(COLLAPSE_STORE,JSON.stringify([...document.querySelectorAll('.card')]
+    .filter(c=>c.classList.contains('collapsed')).map(c=>c.id)));
+}
+function setCollapsed(card,collapsed,persist=true){
+  card.classList.toggle('collapsed',collapsed);
+  card.querySelector('.section-head')?.setAttribute('aria-expanded',String(!collapsed));
+  if(persist)saveCollapsed();
+}
+
+/* ---------- Dual ordering: Learning vs Industry/Recruiter ---------- */
+function applyOrder(mode,persist=true){
+  const main=document.querySelector('main');
+  const secAttr=mode==='industry'?'data-io-sec':'data-lo-sec';
+  const itemAttr=mode==='industry'?'data-io':'data-lo';
+
+  const cards=[...document.querySelectorAll('main .card')];
+  cards.sort((a,b)=>(+a.getAttribute(secAttr)||0)-(+b.getAttribute(secAttr)||0));
+  cards.forEach(card=>{
+    main.appendChild(card);
+    const container=card.querySelector('.items');
+    if(container){
+      const items=[...container.querySelectorAll('.item')];
+      items.sort((a,b)=>(+a.getAttribute(itemAttr)||0)-(+b.getAttribute(itemAttr)||0));
+      items.forEach(it=>container.appendChild(it));
+    }
+  });
+
+  // Re-sequence the left index-nav to match the new section order
+  const nav=document.getElementById('indexNav');
+  if(nav){
+    cards.forEach(card=>{
+      const link=nav.querySelector(`a[href="#${card.id}"]`);
+      if(link)nav.appendChild(link);
+    });
+  }
+
+  // Renumber rank badges + nav idx-num sequentially to match what's on screen
+  cards.forEach((card,i)=>{
+    const n=String(i+1).padStart(2,'0');
+    const badge=card.querySelector('.rank-badge');
+    if(badge)badge.textContent='#'+n;
+    const link=nav?.querySelector(`a[href="#${card.id}"] .idx-num`);
+    if(link)link.textContent=n;
+  });
+
+  document.querySelectorAll('.order-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.mode===mode));
+  const hint=document.getElementById('orderHint');
+  if(hint)hint.textContent=mode==='industry'
+    ? 'Sections lead with practical/production skills — what interviewers actually probe first.'
+    : 'Sections follow a ground-up curriculum — foundations before advanced topics.';
+
+  if(persist)localStorage.setItem(ORDER_STORE,mode);
+}
+function loadOrder(){
+  const saved=localStorage.getItem(ORDER_STORE);
+  applyOrder(saved==='industry'?'industry':'learning',false);
+}
+document.getElementById('orderLearningBtn')?.addEventListener('click',()=>applyOrder('learning'));
+document.getElementById('orderIndustryBtn')?.addEventListener('click',()=>applyOrder('industry'));
+document.querySelectorAll('.section-head').forEach(head=>{
+  head.addEventListener('click',e=>{if(!e.target.closest('input,button,a'))setCollapsed(head.closest('.card'),!head.closest('.card').classList.contains('collapsed'))});
+  head.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setCollapsed(head.closest('.card'),!head.closest('.card').classList.contains('collapsed'))}});
+});
+function updateProgress(){
+  const done=boxes.filter(b=>b.checked).length,pct=boxes.length?Math.round(done/boxes.length*100):0;
+  if(document.getElementById('progressText'))document.getElementById('progressText').textContent=`${done} / ${boxes.length}  [${pct}%]`;
+  if(document.getElementById('bar'))document.getElementById('bar').style.width=pct+'%';
+  document.querySelectorAll('.card').forEach(card=>{
+    const bs=[...card.querySelectorAll('input[type=checkbox]')],sp=card.querySelector('.section-progress');
+    if(sp&&bs.length)sp.textContent=`${bs.filter(b=>b.checked).length}/${bs.length}`;
+  });
+}
+boxes.forEach(b=>b.addEventListener('change',save));
+
+document.getElementById('search')?.addEventListener('input',e=>{
+  const q=e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.card').forEach(card=>{
+    const labels=[...card.querySelectorAll('.item')];if(!labels.length)return;
+    let visible=0,title=(card.querySelector('h2')?.textContent||'').toLowerCase();
+    labels.forEach(label=>{
+      const match=!q||label.dataset.text.includes(q)||title.includes(q);
+      label.classList.toggle('hidden',!match);if(match)visible++;
+    });
+    card.classList.toggle('hidden',visible===0);
+    if(q&&visible>0)setCollapsed(card,false,false);
+  });
+});
+document.getElementById('expandAll')?.addEventListener('click',()=>{document.querySelectorAll('.card').forEach(c=>setCollapsed(c,false,false));saveCollapsed()});
+document.getElementById('collapseAll')?.addEventListener('click',()=>{document.querySelectorAll('.card:not(.hidden)').forEach(c=>setCollapsed(c,true,false));saveCollapsed()});
+document.getElementById('checkVisible')?.addEventListener('click',()=>{document.querySelectorAll('.item:not(.hidden) input').forEach(b=>b.checked=true);save()});
+document.getElementById('reset')?.addEventListener('click',()=>{if(confirm('Clear all checked skills?')){boxes.forEach(b=>b.checked=false);save()}});
+document.getElementById('themeToggle')?.addEventListener('click',()=>applyTheme(document.body.classList.contains('light-theme')?'dark':'light'));
+
+/* Focus Board */
+let todoState={planned:[],works:[],done:[]};
+let draggedTodo=null;
+const uid=()=>`t${Date.now().toString(36)}${Math.random().toString(36).slice(2,7)}`;
+const escapeHtml=s=>s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+function loadTodo(){
+  try{const s=JSON.parse(localStorage.getItem(TODO_STORE)||'null');if(s?.planned&&s?.works&&s?.done)todoState=s}catch(e){}
+  renderTodo();
+}
+function saveTodo(){localStorage.setItem(TODO_STORE,JSON.stringify(todoState));renderTodo()}
+function addTodo(text,status){todoState[status].push({id:uid(),text});saveTodo()}
+function removeTodo(id){
+  for(const s of ['planned','works','done'])todoState[s]=todoState[s].filter(x=>x.id!==id);
+  saveTodo();
+}
+function moveTodo(id,target){
+  let found=null;
+  for(const s of ['planned','works','done']){
+    const i=todoState[s].findIndex(x=>x.id===id);
+    if(i>=0){found=todoState[s].splice(i,1)[0];break}
+  }
+  if(found)todoState[target].push(found);
+  saveTodo();
+}
+function renderTodo(){
+  for(const status of ['planned','works','done']){
+    const drop=document.querySelector(`.todo-drop[data-status="${status}"]`);if(!drop)continue;
+    drop.innerHTML='';
+    todoState[status].forEach(item=>{
+      const card=document.createElement('div');
+      card.className='todo-card';card.draggable=true;card.dataset.id=item.id;
+      card.innerHTML=`<span>${escapeHtml(item.text)}</span><button class="todo-remove" title="Remove">×</button>`;
+      card.querySelector('.todo-remove').onclick=e=>{e.stopPropagation();removeTodo(item.id)};
+      card.ondragstart=e=>{draggedTodo=item.id;card.classList.add('dragging');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('application/x-todo-id',item.id)};
+      card.ondragend=()=>{draggedTodo=null;card.classList.remove('dragging')};
+      drop.appendChild(card);
+    });
+    const count=document.querySelector(`.todo-column[data-status="${status}"] .todo-count`);
+    if(count)count.textContent=todoState[status].length;
+  }
+}
+
+/* Learning-list drag is COPY ONLY */
+document.querySelectorAll('.item').forEach(item=>{
+  item.draggable=true;
+  item.addEventListener('dragstart',e=>{
+    if(e.target.tagName==='INPUT'){e.preventDefault();return}
+    item.classList.add('dragging');
+    const text=item.querySelector('span')?.textContent?.trim()||item.textContent.trim();
+    e.dataTransfer.effectAllowed='copy';
+    e.dataTransfer.setData('text/plain',text);
+    e.dataTransfer.setData('application/x-learning-copy','1');
+  });
+  item.addEventListener('dragend',()=>item.classList.remove('dragging'));
+});
+document.querySelectorAll('.todo-drop').forEach(drop=>{
+  drop.addEventListener('dragover',e=>{
+    e.preventDefault();drop.classList.add('drag-over');
+    e.dataTransfer.dropEffect=e.dataTransfer.types.includes('application/x-learning-copy')?'copy':'move';
+  });
+  drop.addEventListener('dragleave',()=>drop.classList.remove('drag-over'));
+  drop.addEventListener('drop',e=>{
+    e.preventDefault();drop.classList.remove('drag-over');
+    const status=drop.dataset.status;
+    if(e.dataTransfer.getData('application/x-learning-copy')==='1'){
+      const text=e.dataTransfer.getData('text/plain').trim();
+      if(text)addTodo(text,status); // COPY ONLY, source untouched
+    }else{
+      const id=e.dataTransfer.getData('application/x-todo-id')||draggedTodo;
+      if(id)moveTodo(id,status);
+    }
+  });
+});
+
+document.querySelectorAll('#indexNav a').forEach(a=>a.addEventListener('click',()=>{
+  const card=document.getElementById(a.getAttribute('href').slice(1));
+  if(card)setCollapsed(card,false);
+}));
+
+loadTheme();loadOrder();load();loadTodo();updateProgress();
+</script>
+</body>
+</html>
