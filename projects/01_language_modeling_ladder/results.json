@@ -1,0 +1,108 @@
+{
+  "run_type": "portfolio_run",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "epochs": 3,
+  "batch_size": 32,
+  "hidden_dim": 128,
+  "learning_rate": 0.001,
+  "chunk_size": 50,
+  "train_chunks": 10550,
+  "val_chunks": 1173,
+  "embedding_source": {
+    "checkpoint": "checkpoin1t.pth",
+    "matrix": "output.weight"
+  },
+  "models": {
+    "Simple RNN": {
+      "best_val_perplexity": 745.4789,
+      "training_seconds": 21.681,
+      "total_parameters": 917912,
+      "trainable_parameters": 667912,
+      "checkpoint": "projects\\01_language_modeling_ladder\\artifacts\\simple_rnn.pth",
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 6.9592,
+          "val_loss": 6.761112,
+          "val_perplexity": 863.6022,
+          "epoch_seconds": 6.987
+        },
+        {
+          "epoch": 2,
+          "train_loss": 6.712761,
+          "val_loss": 6.672504,
+          "val_perplexity": 790.372,
+          "epoch_seconds": 6.892
+        },
+        {
+          "epoch": 3,
+          "train_loss": 6.630819,
+          "val_loss": 6.614027,
+          "val_perplexity": 745.4789,
+          "epoch_seconds": 7.018
+        }
+      ]
+    },
+    "Custom LSTM": {
+      "best_val_perplexity": 798.7184,
+      "training_seconds": 52.913,
+      "total_parameters": 986648,
+      "trainable_parameters": 736648,
+      "checkpoint": "projects\\01_language_modeling_ladder\\artifacts\\custom_lstm.pth",
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 7.020304,
+          "val_loss": 6.831501,
+          "val_perplexity": 926.5809,
+          "epoch_seconds": 16.723
+        },
+        {
+          "epoch": 2,
+          "train_loss": 6.762187,
+          "val_loss": 6.724139,
+          "val_perplexity": 832.2551,
+          "epoch_seconds": 17.32
+        },
+        {
+          "epoch": 3,
+          "train_loss": 6.698769,
+          "val_loss": 6.683009,
+          "val_perplexity": 798.7184,
+          "epoch_seconds": 17.125
+        }
+      ]
+    },
+    "nn.LSTM": {
+      "best_val_perplexity": 797.8952,
+      "training_seconds": 3.791,
+      "total_parameters": 987160,
+      "trainable_parameters": 737160,
+      "checkpoint": "projects\\01_language_modeling_ladder\\artifacts\\nnlstm.pth",
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 7.032776,
+          "val_loss": 6.884891,
+          "val_perplexity": 977.3954,
+          "epoch_seconds": 1.2
+        },
+        {
+          "epoch": 2,
+          "train_loss": 6.773017,
+          "val_loss": 6.723751,
+          "val_perplexity": 831.932,
+          "epoch_seconds": 1.199
+        },
+        {
+          "epoch": 3,
+          "train_loss": 6.698462,
+          "val_loss": 6.681977,
+          "val_perplexity": 797.8952,
+          "epoch_seconds": 1.215
+        }
+      ]
+    }
+  }
+}

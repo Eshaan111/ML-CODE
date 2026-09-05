@@ -1,0 +1,66 @@
+{
+  "run_type": "smoke_test",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "epochs": 1,
+  "batch_size": 32,
+  "hidden_dim": 128,
+  "learning_rate": 0.001,
+  "chunk_size": 50,
+  "train_chunks": 10550,
+  "val_chunks": 1173,
+  "embedding_source": {
+    "checkpoint": "checkpoin1t.pth",
+    "matrix": "output.weight"
+  },
+  "models": {
+    "Simple RNN": {
+      "best_val_perplexity": 1311.814,
+      "training_seconds": 0.647,
+      "total_parameters": 917912,
+      "trainable_parameters": 667912,
+      "checkpoint": "projects\\01_language_modeling_ladder\\artifacts\\simple_rnn.pth",
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 7.869845,
+          "val_loss": 7.179166,
+          "val_perplexity": 1311.814,
+          "epoch_seconds": 0.57
+        }
+      ]
+    },
+    "Custom LSTM": {
+      "best_val_perplexity": 1606.1746,
+      "training_seconds": 1.261,
+      "total_parameters": 986648,
+      "trainable_parameters": 736648,
+      "checkpoint": "projects\\01_language_modeling_ladder\\artifacts\\custom_lstm.pth",
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 8.116293,
+          "val_loss": 7.381611,
+          "val_perplexity": 1606.1746,
+          "epoch_seconds": 1.102
+        }
+      ]
+    },
+    "nn.LSTM": {
+      "best_val_perplexity": 1536.3849,
+      "training_seconds": 0.1,
+      "total_parameters": 987160,
+      "trainable_parameters": 737160,
+      "checkpoint": "projects\\01_language_modeling_ladder\\artifacts\\nnlstm.pth",
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 8.064653,
+          "val_loss": 7.337187,
+          "val_perplexity": 1536.3849,
+          "epoch_seconds": 0.081
+        }
+      ]
+    }
+  }
+}

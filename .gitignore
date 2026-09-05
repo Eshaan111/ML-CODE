@@ -1,1 +1,7 @@
 datasets/
+.venv/
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+.mpl_cache/
+projects/**/artifacts/*.pth

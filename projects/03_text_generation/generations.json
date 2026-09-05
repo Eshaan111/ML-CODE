@@ -1,0 +1,119 @@
+{
+  "device": "cuda",
+  "model_name": "Simple RNN",
+  "held_out_perplexity": 113.08401599243945,
+  "generated_length": 30,
+  "outputs": {
+    "harry looked at": {
+      "unknown_seed_words": [],
+      "greedy": {
+        "text": "harry looked at the other side of the fire and the order of the phoenix rowling the door of the phoenix rowling harry s face was still in the air and the other",
+        "diversity": {
+          "tokens": 33,
+          "unique_tokens": 19,
+          "unique_ratio": 0.5758
+        }
+      },
+      "temperatures": {
+        "0.5": {
+          "text": "harry looked at him at the moment the door he had just got a little and that s the hogwarts express the death eaters had just been a lot of it was the",
+          "diversity": {
+            "tokens": 33,
+            "unique_tokens": 25,
+            "unique_ratio": 0.7576
+          }
+        },
+        "1.0": {
+          "text": "harry looked at him at malfoy as the end he felt her chest professor mcgonagall kept that are he dreamed of the forbidden friends a return of course gone harry did not sneak",
+          "diversity": {
+            "tokens": 33,
+            "unique_tokens": 28,
+            "unique_ratio": 0.8485
+          }
+        },
+        "1.5": {
+          "text": "harry looked at him at malfoy cheering the cost road whipping her chest professor mcgonagall kept features forward he dreamed of galleons eye and thin use year when gone suggesting what looked wishes",
+          "diversity": {
+            "tokens": 33,
+            "unique_tokens": 31,
+            "unique_ratio": 0.9394
+          }
+        }
+      }
+    },
+    "ron said to": {
+      "unknown_seed_words": [],
+      "greedy": {
+        "text": "ron said to harry and hermione and hermione were looking at the other side of the fire and the order of the phoenix rowling the door of the phoenix rowling harry s face",
+        "diversity": {
+          "tokens": 33,
+          "unique_tokens": 20,
+          "unique_ratio": 0.6061
+        }
+      },
+      "temperatures": {
+        "0.5": {
+          "text": "ron said to you see the ministry of magic said harry and hermione s voice watching her wand and slowly a little note in the air and sat down the fire but harry",
+          "diversity": {
+            "tokens": 33,
+            "unique_tokens": 27,
+            "unique_ratio": 0.8182
+          }
+        },
+        "1.0": {
+          "text": "ron said to slughorn near the deluminator in the forest this commentary it wasn t watching spilling petunia felt slowly a obscured harry and he stood back at the front of them two",
+          "diversity": {
+            "tokens": 33,
+            "unique_tokens": 31,
+            "unique_ratio": 0.9394
+          }
+        },
+        "1.5": {
+          "text": "ron said to slughorn near nevertheless holding me visiting severely this commentary champions offering would than spilling or poking slowly heart obscured yelling and red waist oddly gliding intently ron get but two",
+          "diversity": {
+            "tokens": 33,
+            "unique_tokens": 32,
+            "unique_ratio": 0.9697
+          }
+        }
+      }
+    },
+    "hermione opened the": {
+      "unknown_seed_words": [],
+      "greedy": {
+        "text": "hermione opened the door and the goblet of fire rowling harry s face was a very long and he was still looking at the other side of the fire and the order of",
+        "diversity": {
+          "tokens": 33,
+          "unique_tokens": 23,
+          "unique_ratio": 0.697
+        }
+      },
+      "temperatures": {
+        "0.5": {
+          "text": "hermione opened the wand and the size of the tail of the office he was still staring at the back of the field and it was a great deal of harry s face",
+          "diversity": {
+            "tokens": 33,
+            "unique_tokens": 23,
+            "unique_ratio": 0.697
+          }
+        },
+        "1.0": {
+          "text": "hermione opened the wand looking peering up onto his tail then don office get this way shut up the hint of any of us it s harry clapped close with harry s i",
+          "diversity": {
+            "tokens": 33,
+            "unique_tokens": 28,
+            "unique_ratio": 0.8485
+          }
+        },
+        "1.5": {
+          "text": "hermione opened the wand nodding the size of vapor tail would hear office some teachers and shut professors frank s least coins where they it unlike him clapped close with bits then mumbled",
+          "diversity": {
+            "tokens": 33,
+            "unique_tokens": 32,
+            "unique_ratio": 0.9697
+          }
+        }
+      }
+    }
+  }
+}

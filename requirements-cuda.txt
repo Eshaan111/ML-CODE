@@ -1,0 +1,32 @@
+# Python 3.11 environment for all scripts and notebooks in this repository.
+# Install the CUDA-enabled PyTorch wheels first; see the command below.
+
+numpy==1.26.4
+scipy==1.11.4
+pandas==2.2.2
+lxml==5.2.2
+scikit-learn==1.5.0
+joblib==1.4.2
+statsmodels==0.14.2
+lifelines==0.28.0
+pygam==0.9.1
+l0bnb==1.0.0
+ISLP==0.4.0
+
+pytorch-lightning==2.2.5
+lightning==2.2.5
+torchinfo==1.8.0
+torchmetrics==1.4.0.post0
+tensorboard==2.17.0
+
+matplotlib==3.8.4
+seaborn==0.13.2
+optuna==3.6.1
+nltk==3.8.1
+
+jupyterlab==4.2.1
+notebook==7.2.0
+ipykernel==6.29.4
+
+# CUDA install (run before installing this file):
+# python -m pip install torch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 --index-url https://download.pytorch.org/whl/cu121

@@ -1,0 +1,55 @@
+{
+  "device": "cuda",
+  "model_name": "Simple RNN",
+  "epochs": 5,
+  "sentences": 62821,
+  "vocab_size": 5000,
+  "chunks": 22909,
+  "train_chunks": 20618,
+  "val_chunks": 2291,
+  "embedding_source": {
+    "checkpoint": "checkpoin1t.pth",
+    "matrix": "output.weight"
+  },
+  "transferred_embedding_rows": 4842,
+  "new_embedding_rows": 158,
+  "best_val_perplexity": 113.084,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 5.957113,
+      "val_loss": 5.413681,
+      "val_perplexity": 224.4562,
+      "epoch_seconds": 17.607
+    },
+    {
+      "epoch": 2,
+      "train_loss": 5.191834,
+      "val_loss": 5.027456,
+      "val_perplexity": 152.5445,
+      "epoch_seconds": 17.616
+    },
+    {
+      "epoch": 3,
+      "train_loss": 4.929531,
+      "val_loss": 4.872609,
+      "val_perplexity": 130.6614,
+      "epoch_seconds": 17.845
+    },
+    {
+      "epoch": 4,
+      "train_loss": 4.791369,
+      "val_loss": 4.785541,
+      "val_perplexity": 119.7662,
+      "epoch_seconds": 17.813
+    },
+    {
+      "epoch": 5,
+      "train_loss": 4.700417,
+      "val_loss": 4.728131,
+      "val_perplexity": 113.084,
+      "epoch_seconds": 18.83
+    }
+  ],
+  "checkpoint": "projects\\03_text_generation\\artifacts\\generator_model.pth"
+}
