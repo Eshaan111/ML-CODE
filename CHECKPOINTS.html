@@ -312,7 +312,7 @@ body.light-theme .section-head{background:linear-gradient(180deg,var(--surface-h
 <div>
 <p class="eyebrow"><span class="status-dot"></span>DL_SKILL_MATRIX</p>
 <h1>Deep Learning Engineer<br/>Skill Matrix</h1>
-<p class="sub">Interactive knowledge map · Color Hunt earth palette · progress stored locally · click any section header to collapse it.</p>
+<p class="sub">Repository evidence assessment · 308 / 594 demonstrated · checked means demonstrated in code, not mastered · progress stored locally.</p>
 </div>
 </div>
 <div class="controls">
@@ -672,6 +672,36 @@ body.light-theme .section-head{background:linear-gradient(180deg,var(--surface-h
 <script>
 const boxes=[...document.querySelectorAll('input[type=checkbox]')];
 const STORE='dl-engineer-checklist-v2';
+const ASSESSMENT_VERSION='ml-code-repo-assessment-2026-09-06-v1';
+const ASSESSMENT_STORE='dl-engineer-code-assessment-version';
+const assessmentRange=(start,end)=>Array.from({length:end-start+1},(_,i)=>start+i);
+const ASSESSED_SKILL_NUMBERS=[
+  0,11,1,2,3,12,13,14,15,18,19,20,21,22,26,32,29,
+  ...assessmentRange(34,47),55,52,53,48,54,60,58,66,74,63,75,
+  84,76,77,78,79,82,87,90,101,105,107,108,109,110,116,
+  133,134,135,122,126,123,125,136,137,138,139,140,141,
+  149,144,145,152,150,151,154,155,156,157,
+  183,187,184,185,186,192,196,
+  197,198,199,200,203,201,202,205,207,209,210,
+  212,213,214,215,216,217,219,...assessmentRange(229,239),242,
+  243,244,245,254,247,246,248,249,250,
+  255,256,257,258,259,265,260,262,263,264,266,
+  267,268,269,270,274,282,286,287,288,289,290,300,
+  313,307,309,310,311,314,315,319,316,324,
+  325,326,333,334,327,328,329,330,331,332,335,336,337,
+  339,340,341,342,343,344,345,346,347,348,349,350,351,352,353,355,356,
+  358,359,361,362,364,365,367,368,369,370,371,372,
+  375,377,376,378,379,380,381,382,383,384,385,386,387,
+  404,408,406,407,409,410,413,414,417,418,419,421,422,423,442,
+  450,456,457,458,459,460,461,
+  464,462,463,472,466,468,469,471,473,474,475,476,
+  477,482,483,484,491,489,493,500,501,503,505,506,509,
+  ...assessmentRange(510,518),529,530,531,533,537,538,
+  555,557,560,561,562,563,564,565,
+  566,577,567,568,569,571,572,573,570,574,578,575,579,580,
+  ...assessmentRange(582,590),592
+];
+const ASSESSED_SKILLS=new Set(ASSESSED_SKILL_NUMBERS.map(number=>`item-${number}`));
 const COLLAPSE_STORE='dl-engineer-collapsed-v3';
 const THEME_STORE='dl-engineer-theme-v2';
 const TODO_STORE='dl-engineer-focus-board-v1';
@@ -690,6 +720,11 @@ function loadTheme(){
 }
 function load(){
   let state={};try{state=JSON.parse(localStorage.getItem(STORE)||'{}')}catch(e){}
+  if(localStorage.getItem(ASSESSMENT_STORE)!==ASSESSMENT_VERSION){
+    state=Object.fromEntries(boxes.map(box=>[box.id,ASSESSED_SKILLS.has(box.id)]));
+    localStorage.setItem(STORE,JSON.stringify(state));
+    localStorage.setItem(ASSESSMENT_STORE,ASSESSMENT_VERSION);
+  }
   boxes.forEach(b=>b.checked=!!state[b.id]);
   let collapsed=[];try{collapsed=JSON.parse(localStorage.getItem(COLLAPSE_STORE)||'[]')}catch(e){}
   document.querySelectorAll('.card').forEach(card=>{if(collapsed.includes(card.id))setCollapsed(card,true,false)});

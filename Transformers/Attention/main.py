@@ -80,6 +80,7 @@ class MultiHeadedAttention(nn.Module):
                 mask_inf = idx_T_col > idx_T_row
                 scaled[:,mask_0] += 0
                 scaled[:,mask_inf] = float("-inf")
+                
             head_output_embeds = torch.softmax(scaled, dim=2 ) @ value_embeds
 
             
