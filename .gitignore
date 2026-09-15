@@ -5,3 +5,7 @@ __pycache__/
 *.py[cod]
 .mpl_cache/
 projects/**/artifacts/*.pth
+GUIDES/
+Captioning-DOT/image_feature_cache/
+projects/Captioning-DOT/image_feature_cache/
+projects/Captioning-DOT/checkpoints/
