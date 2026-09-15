@@ -29,7 +29,7 @@ def test_input_output_shape(decoder_config):
         num_heads=H        
     )
 
-    output = decoderBlock(output_e_tensor, input_d_tensor)
+    output = decoderBlock(input_d_tensor, output_e_tensor)
 
     assert output.shape == (B,T_d,E)
 

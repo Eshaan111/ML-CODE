@@ -6,11 +6,11 @@ from Attention.MultiHeadAttention import MultiHeadedAttention
 from Components.residual_connect import ResidualConnect
 
 class SingleDecoderBlock(nn.Module):
-    def __init__(self, embed_dim, num_heads, ffo_neurons = 1024):
+    def __init__(self, embed_dim, num_heads, ffo_neurons = 1024, is_cross_attention = True):
         super().__init__()
         self.embed_dim = embed_dim
         self.num_heads = num_heads
-
+        self.is_cross_attention = is_cross_attention
         attention = MultiHeadedAttention(embed_dim, num_heads) 
         cross_attention = CrossAttention(embed_dim, num_heads) 
             
@@ -23,34 +23,31 @@ class SingleDecoderBlock(nn.Module):
         self.residual_attention = ResidualConnect(
             attention
         )
-        self.residual_cross_attention = ResidualConnect(
-            cross_attention
-        )
+        if is_cross_attention :
+            self.residual_cross_attention = ResidualConnect(
+                cross_attention
+            )
         self.residual_ffo = ResidualConnect(
             self.ffo
         )
 
         self.attention_norm = nn.LayerNorm(embed_dim)
-        self.cross_attention_norm = nn.LayerNorm(embed_dim)
+        if is_cross_attention : self.cross_attention_norm = nn.LayerNorm(embed_dim)
         self.ffo_norm = nn.LayerNorm(embed_dim)
 
 
-    def forward(self, encoder_output : torch.Tensor, decoder_input : torch.Tensor) -> torch.Tensor:
-        B,T_e,E = encoder_output.shape
+    def forward(self, decoder_input : torch.Tensor, encoder_output : torch.Tensor = None) -> torch.Tensor:
+        if self.is_cross_attention : B,T_e,E = encoder_output.shape
         _,T_d,_ = decoder_input.shape
-
-        self.residual_attention = self.residual_attention.to(decoder_input.device)
-        self.residual_cross_attention = self.residual_cross_attention.to(decoder_input.device)
-        self.ffo = self.ffo.to(decoder_input.device)
-        
 
         attention = self.residual_attention(residual_input = decoder_input, input = decoder_input, mask = 'casual' )
         attention = self.attention_norm(attention)
-
-        cross_attention = self.residual_cross_attention(residual_input = attention,decoder_input = attention, encoder_output = encoder_output)
-        cross_attention = self.cross_attention_norm(cross_attention)
-
-        ffo = self.residual_ffo(cross_attention, cross_attention)
+        if self.is_cross_attention :
+            cross_attention = self.residual_cross_attention(residual_input = attention,decoder_input = attention, encoder_output = encoder_output)
+            cross_attention = self.cross_attention_norm(cross_attention)
+            attention = cross_attention
+        
+        ffo = self.residual_ffo(attention, attention)
         ffo = self.ffo_norm(ffo)
 
         return ffo 
