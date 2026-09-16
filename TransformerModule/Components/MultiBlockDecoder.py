@@ -1,7 +1,7 @@
 import torch 
 import torch.nn as nn 
-from Components.decoderBlock import SingleDecoderBlock
-from positionalEncoding import PositionalEncoder
+from .decoderBlock import SingleDecoderBlock
+from .positionalEncoding import PositionalEncoder
 
 
 class CompleteDecoderBlock(nn.Module):
@@ -16,7 +16,7 @@ class CompleteDecoderBlock(nn.Module):
         self.positional_layer = PositionalEncoder(embed_dim)
         
         self.decoders = nn.ModuleList(
-            [SingleDecoderBlock(embed_dim, num_heads, 1024, is_cross_attention ) for _ in range(n_blocks)]
+            [SingleDecoderBlock(embed_dim, num_heads, ffo_neurons, is_cross_attention ) for _ in range(n_blocks)]
         ) 
         self.output_head = nn.Linear(embed_dim, vocab_count)
         
@@ -27,8 +27,8 @@ class CompleteDecoderBlock(nn.Module):
             assert (B_e, E_e) == (B_d, self.embed_dim)
         
         input = self.emebedding_layer(decoder_input) # B,T_d,E
-        input = self.positional_layer.forward(input, return_added= True) # B,T_d,E
-        
+        input = self.positional_layer(input, return_added= True) # B,T_d,E
+        print(input.shape)
         decoder_input = input    
         for single_decoder in self.decoders :
             if self.is_cross_attention:

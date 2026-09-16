@@ -23,7 +23,7 @@ class CompleteEncoderBlock(nn.Module):
         B,T_e = input.shape
         
         input = self.emebedding_layer(input) # B,T_e,E
-        input = self.positional_layer.forward(input, return_added= True) # B,T_e,E
+        input = self.positional_layer(input, return_added= True) # B,T_e,E
         
         encoder_input = input    
         for single_encoder in self.encoders :

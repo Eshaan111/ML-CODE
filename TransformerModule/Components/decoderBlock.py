@@ -38,6 +38,7 @@ class SingleDecoderBlock(nn.Module):
 
     def forward(self, decoder_input : torch.Tensor, encoder_output : torch.Tensor = None) -> torch.Tensor:
         if self.is_cross_attention : B,T_e,E = encoder_output.shape
+        print(decoder_input.shape)
         _,T_d,_ = decoder_input.shape
 
         attention = self.residual_attention(residual_input = decoder_input, input = decoder_input, mask = 'casual' )
