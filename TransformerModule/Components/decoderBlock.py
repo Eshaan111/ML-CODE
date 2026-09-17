@@ -11,9 +11,8 @@ class SingleDecoderBlock(nn.Module):
         self.embed_dim = embed_dim
         self.num_heads = num_heads
         self.is_cross_attention = is_cross_attention
+        
         attention = MultiHeadedAttention(embed_dim, num_heads) 
-        cross_attention = CrossAttention(embed_dim, num_heads) 
-            
         self.ffo = nn.Sequential(
             nn.Linear(embed_dim,ffo_neurons),
             nn.ReLU(),
@@ -24,6 +23,7 @@ class SingleDecoderBlock(nn.Module):
             attention
         )
         if is_cross_attention :
+            cross_attention = CrossAttention(embed_dim, num_heads) 
             self.residual_cross_attention = ResidualConnect(
                 cross_attention
             )
@@ -38,10 +38,10 @@ class SingleDecoderBlock(nn.Module):
 
     def forward(self, decoder_input : torch.Tensor, encoder_output : torch.Tensor = None) -> torch.Tensor:
         if self.is_cross_attention : B,T_e,E = encoder_output.shape
-        print(decoder_input.shape)
+        # print(decoder_input.shape)
         _,T_d,_ = decoder_input.shape
 
-        attention = self.residual_attention(residual_input = decoder_input, input = decoder_input, mask = 'casual' )
+        attention = self.residual_attention(residual_input = decoder_input, input = decoder_input, mask = 'causal' )
         attention = self.attention_norm(attention)
         if self.is_cross_attention :
             cross_attention = self.residual_cross_attention(residual_input = attention,decoder_input = attention, encoder_output = encoder_output)

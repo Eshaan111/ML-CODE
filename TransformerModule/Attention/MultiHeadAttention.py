@@ -19,11 +19,6 @@ class MultiHeadedAttention(nn.Module):
     def forward(self, input, mask = None):
         B,T,E = input.shape
 
-        self.q = self.q.to(input.device)
-        self.k = self.k.to(input.device)
-        self.v = self.v.to(input.device)
-        self.wo = self.wo.to(input.device)
-
         assert E % self.num_heads == 0
         assert E == self.embed_dim
 
@@ -42,9 +37,9 @@ class MultiHeadedAttention(nn.Module):
         sim_scores = sim_scores / math.sqrt(Eh)
 
         if mask == 'causal':
-            t_q = torch.arange(0,T).view(T,1)
-            t_k = torch.arange(0,T).view(1,T)
-            mask_0 = t_q >= t_k
+            t_q = torch.arange(0,T).view(T,1).to(input.device)
+            t_k = torch.arange(0,T).view(1,T).to(input.device)
+            # mask_0 = t_q >= t_k
             mask_inf = t_q < t_k
             sim_scores = sim_scores.masked_fill(
                 mask_inf,

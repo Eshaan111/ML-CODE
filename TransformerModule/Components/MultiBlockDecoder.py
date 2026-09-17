@@ -28,7 +28,7 @@ class CompleteDecoderBlock(nn.Module):
         
         input = self.emebedding_layer(decoder_input) # B,T_d,E
         input = self.positional_layer(input, return_added= True) # B,T_d,E
-        print(input.shape)
+        # print(input.shape)
         decoder_input = input    
         for single_decoder in self.decoders :
             if self.is_cross_attention:
