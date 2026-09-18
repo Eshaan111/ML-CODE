@@ -12,7 +12,7 @@ class CompleteDecoderBlock(nn.Module):
         self.vocab_count = vocab_count
         self.embed_dim = embed_dim
         self.is_cross_attention = is_cross_attention
-        self.emebedding_layer = nn.Embedding(vocab_count, embed_dim)
+        self.embedding_layer = nn.Embedding(vocab_count, embed_dim)
         self.positional_layer = PositionalEncoder(embed_dim)
         
         self.decoders = nn.ModuleList(
@@ -23,10 +23,12 @@ class CompleteDecoderBlock(nn.Module):
     def forward(self, decoder_input, encoder_output = None, return_post_softmax = False):
         B_d,T_d = decoder_input.shape
         if self.is_cross_attention : 
+            assert encoder_output is not None, \
+                "encoder_output is required when cross-attention is enabled"
             B_e,T_e,E_e = encoder_output.shape
             assert (B_e, E_e) == (B_d, self.embed_dim)
         
-        input = self.emebedding_layer(decoder_input) # B,T_d,E
+        input = self.embedding_layer(decoder_input) # B,T_d,E
         input = self.positional_layer(input, return_added= True) # B,T_d,E
         # print(input.shape)
         decoder_input = input    
